@@ -2,6 +2,7 @@
 
 Robot* Robot::instance = NULL;
 Drivetrain Robot::drivetrain;
+Lift Robot::lift;
 
 Robot::Robot() {}
 
@@ -14,4 +15,8 @@ Robot* Robot::getRobot() {
 
 void Robot::drive(pros::Controller &controller) {
 	drivetrain.drive(controller);
+}
+
+void Robot::runLift(pros::Controller &controller) {
+	lift.run(controller);
 }

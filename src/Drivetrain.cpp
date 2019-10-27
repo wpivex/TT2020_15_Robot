@@ -25,6 +25,6 @@ Drivetrain::Drivetrain() {
 }
 
 void Drivetrain::drive(pros::Controller &joystick) {
-  chassisController->tank(joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)/127.0,
-                          joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)/127.0);
+  chassisController->arcade(joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)/127.0,
+                          joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)/127.0, 0);
 }

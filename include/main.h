@@ -39,7 +39,7 @@
 /**
  * You should add more #includes here
  */
-//#include "okapi/api.hpp"
+#include "okapi/api.hpp"
 //#include "pros/api_legacy.h"
 
 /**
@@ -52,7 +52,23 @@
  */
 // using namespace pros;
 // using namespace pros::literals;
-// using namespace okapi;
+using namespace okapi;
+
+//Ports
+#define DRIVE_LEFT_BACK_PORT 18
+#define DRIVE_LEFT_FRONT_PORT 20
+#define DRIVE_LEFT_MID_PORT 19
+#define DRIVE_RIGHT_BACK_PORT 14
+#define DRIVE_RIGHT_FRONT_PORT 17
+#define DRIVE_RIGHT_MID_PORT 16
+
+#define LIFT_RIGHT 43//need to find these
+#define LIFT_LEFT 42//left and right relative to front of robot
+
+#define DRIVE_RIGHT_ENC_TOP 5
+#define DRIVE_RIGHT_ENC_BOT 6
+#define DRIVE_LEFT_ENC_TOP 7
+#define DRIVE_LEFT_ENC_BOT 8
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure
