@@ -1,4 +1,5 @@
 #include "main.h"
+#include "Sbeve.hpp"
 
 /**
  * A callback function for LLEMU's center button.
@@ -77,8 +78,8 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 	while (true) {
-		Robot::getRobot()->drive(master);
-		Robot::getRobot()->runLift(master);
+		Sbeve::getSbeve()->drive(master);
+		Sbeve::getSbeve()->runLift(master);
 
 		//Must leave this here, will stall system
 		pros::delay(20);

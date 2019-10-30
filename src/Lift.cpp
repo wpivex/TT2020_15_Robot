@@ -11,5 +11,5 @@ Lift::Lift() {
 }
 
 void Lift::run(pros::Controller &joystick) {
-  lift.controllerSet(joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)/127.0);
+  lift->moveVelocity(200*joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)/127.0);
 }
