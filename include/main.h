@@ -65,6 +65,8 @@ using namespace okapi;
 #define LIFT_RIGHT 43//need to find these
 #define LIFT_LEFT 42//left and right relative to front of robot
 
+#define CUBE_TUBE 15
+
 #define DRIVE_RIGHT_ENC_TOP 5
 #define DRIVE_RIGHT_ENC_BOT 6
 #define DRIVE_LEFT_ENC_TOP 7

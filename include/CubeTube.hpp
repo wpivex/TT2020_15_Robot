@@ -1,10 +1,11 @@
 #include "main.h"
 
-class Lift {
+class CubeTube {
 public:
-  Lift();
+  CubeTube();
 
   void run(pros::Controller &controller);
+
 private:
-  std::shared_ptr<okapi::MotorGroup> liftMotor;
+  std::shared_ptr<okapi::Motor> tubeMotor;
 };
