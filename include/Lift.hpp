@@ -6,5 +6,5 @@ public:
 
   void run(pros::Controller &controller);
 private:
-  std::shared_ptr<okapi::MotorGroup> liftMotor;
+  std::shared_ptr<okapi::Motor> liftMotor;
 };

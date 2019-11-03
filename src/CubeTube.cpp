@@ -1,7 +1,7 @@
 #include "CubeTube.hpp"
 
 CubeTube::CubeTube() {
-  tubeMotor = std::make_shared<okapi::Motor>((okapi::Motor(CUBE_TUBE,false,okapi::AbstractMotor::gearset::green)));
+  tubeMotor = std::make_shared<okapi::Motor>((okapi::Motor(CUBE_TUBE,false,okapi::AbstractMotor::gearset::green,okapi::AbstractMotor::encoderUnits::degrees)));
 
 
   tubeMotor->setGearing(okapi::AbstractMotor::gearset::green);
