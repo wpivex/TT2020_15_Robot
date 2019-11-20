@@ -1,20 +1,11 @@
-#include "Lift.hpp"
+#include "lift.hpp"
+#include "sbeve.hpp"
 
 Lift::Lift() {
-
-  okapi:MotorGroup tempGroup
-  ({okapi::Motor(LIFT_RIGHT,false,okapi::AbstractMotor::gearset::green,okapi::AbstractMotor::encoderUnits::degrees),
-    okapi::Motor(LIFT_RIGHT,true,okapi::AbstractMotor::gearset::green,okapi::AbstractMotor::encoderUnits::degrees)});
-
-  liftMotor = std::make_shared<okapi::MotorGroup> (tempGroup);
-
-//   liftMotor = std::make_shared<okapi::MotorGroup> (({okapi::Motor(LIFT_RIGHT,false,okapi::AbstractMotor::gearset::green),
-      // okapi::Motor(LIFT_RIGHT,true,okapi::AbstractMotor::gearset::green)}));
-
-  liftMotor->setGearing(okapi::AbstractMotor::gearset::green);
-  liftMotor->setBrakeMode(okapi::AbstractMotor::brakeMode::brake);
-}
-
-void Lift::run(pros::Controller &joystick) {
-  liftMotor->moveVelocity(200*joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)/127.0);
+    MotorGroup left({Motor(LIFT_LEFT, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees));
+    MotorGroup right({Motor(LIFT_RIGHT, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees));
+    leftMotors = std::make_shared<MotorGroup>(left);
+    rightMotors = std::make_shared<MotorGroup>(right);
+    leftMotors->setBrakeMode(AbstractMotor::brakeMode::hold);
+    rightMotors->setBrakeMode(AbstractMotor::brakeMode::hold);
 }

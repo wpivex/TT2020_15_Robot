@@ -1,5 +1,5 @@
 #include "main.h"
-#include "Sbeve.hpp"
+#include "hamburger.hpp"
 
 /**
  * A callback function for LLEMU's center button.
@@ -59,7 +59,47 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	auto robot = Hamburger::getRobot();
+	robot->drive->chassis->moveDistance(24_in);
+	// robot->drive->chassis->driveToPoint({24_in,24_in});
+	// robot->drive->chassis->stop();
+
+	// robot->runIntake(100);
+	// robot->drive->chassis->getModel()->setMaxVelocity(55);
+
+	// robot->drive->chassis->moveDistance(38_in);
+	// pros::delay(100);
+
+	// robot->drive->chassis->getModel()->setMaxVelocity(110);
+	// robot->drive->chassis->turnAngle(45_deg);
+	// robot->runIntake(200);
+	// robot->drive->chassis->getModel()->setMaxVelocity(60);
+	// robot->drive->chassis->moveDistance(20_in);
+	// pros::delay(2000);
+
+	// robot->drive->chassis->getModel()->setMaxVelocity(110);
+	// robot->drive->chassis->moveDistance(-30_in);
+	// robot->runIntake(0);
+
+	// robot->drive->chassis->turnAngle(125_deg);
+
+	// pros::delay(500);
+
+	// robot->drive->chassis->moveDistance(17_in);
+	// pros::delay(500);
+
+	// robot->tiltFourbarScore();
+
+	// pros::delay(5000);
+
+	// robot->runIntake(-50);
+	// pros::delay(250);
+	// robot->drive->chassis->moveDistance(-15_in);
+
+	// robot->tiltFourbarRetract();
+
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -76,12 +116,17 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
+	auto robot = Hamburger::getRobot();
+	// ADIEncoder encL(ENCODER_LEFT_DRIVE_TOP,ENCODER_LEFT_DRIVE_BOT,false);
+	// ADIEncoder encR(ENCODER_RIGHT_DRIVE_TOP,ENCODER_RIGHT_DRIVE_BOT,true);
+	// encL.reset();
+	// encR.reset();
 
 	while (true) {
-		Sbeve::getSbeve()->drive(master);
-		Sbeve::getSbeve()->runLift(master);
-
-		//Must leave this here, will stall system
+		robot->opControl(master);
+		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
+		pros::lcd::set_text(1, "Left Enc: " + std::to_string(vals[0]));
+		pros::lcd::set_text(2, "Right Enc: " + std::to_string(vals[1]));
 		pros::delay(20);
 	}
 }
