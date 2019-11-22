@@ -12,13 +12,12 @@ Hamburger::Hamburger() {
 	drive = std::make_shared<Drive>();
 
 	MotorGroup intakeMotors({Motor(INTAKE_LEFT, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
-							 Motor(INTAKE_RIGHT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees)});
+							 						 Motor(INTAKE_RIGHT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees)});
 	intakeMotors.setBrakeMode(AbstractMotor::brakeMode::brake);
 	intake = std::make_shared<MotorGroup>(intakeMotors);
 
-	MotorGroup fourbarMotors({Motor(FOURBAR, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees),
-							Motor(FOURBAR2, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees),
-	});
+	MotorGroup fourbarMotors({Motor(FOURBAR_RIGHT, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees),
+						  							Motor(FOURBAR_LEFT, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees)});
 	fourbar = std::make_shared<MotorGroup>(fourbarMotors);
 
 	// brainDriver = std::make_shared<BrainDriver>(BrainDriver());
@@ -40,7 +39,7 @@ void Hamburger::opControlIntake(pros::Controller &joystick) {
 	int r2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
 	int l1 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
 	int l2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
-	
+
 	if (r1) {
 		runIntake(200);
 	}

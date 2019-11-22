@@ -16,8 +16,8 @@ using namespace okapi;
 #define INTAKE_LEFT 20
 #define INTAKE_RIGHT 19
 
-#define FOURBAR 18
-#define FOURBAR2 17
+#define FOURBAR_LEFT 18
+#define FOURBAR_RIGHT 17
 
 #define ENCODER_LEFT_DRIVE_TOP 'a'
 #define ENCODER_LEFT_DRIVE_BOT 'b'
