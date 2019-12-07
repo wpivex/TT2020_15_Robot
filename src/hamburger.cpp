@@ -20,6 +20,10 @@ Hamburger::Hamburger() {
 						  							Motor(FOURBAR_LEFT, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees)});
 	fourbar = std::make_shared<MotorGroup>(fourbarMotors);
 
+	MotorGroup tiltMotors({Motor(DRIVE_LEFT_FRONT, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees),
+						  							Motor(DRIVE_RIGHT_FRONT, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees)});
+	tilt = std::make_shared<MotorGroup>(tiltMotors);
+
 	// brainDriver = std::make_shared<BrainDriver>(BrainDriver());
 }
 
@@ -27,11 +31,30 @@ void Hamburger::opControl(pros::Controller &joystick) {
 	drive->opControlDrive(joystick);
 	opControlFourbar(joystick);
 	opControlIntake(joystick);
+	opControlTilt(joystick);
 }
-
 
 void Hamburger::runIntake(int power) {
 	intake->moveVelocity(power);
+}
+
+void Hamburger::runTilt(int power) {
+	tilt->moveVelocity(power);
+}
+
+void Hamburger::opControlTilt(pros::Controller &joystick) {
+	int r1 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
+	int r2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
+
+	if (r1) {
+		runTilt(200);
+	}
+	else if (r2) {
+		runTilt(-200);
+	}
+	else {
+		runTilt(0);
+	}
 }
 
 void Hamburger::opControlIntake(pros::Controller &joystick) {
@@ -40,10 +63,10 @@ void Hamburger::opControlIntake(pros::Controller &joystick) {
 	int l1 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
 	int l2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
 
-	if (r1) {
+	if (l2) {
 		runIntake(200);
 	}
-	else if (r2) {
+	else if (l1) {
 		runIntake(-200);
 	}
 	else {
@@ -52,14 +75,14 @@ void Hamburger::opControlIntake(pros::Controller &joystick) {
 }
 
 void Hamburger::opControlFourbar(pros::Controller& joystick) {
-	if (joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-		moveFourbar(100);
-	} else if (joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-		moveFourbar(-100);
-	} else {
-		moveFourbar(0);
-	}
-	// moveFourbar(joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+	// if (joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+	// 	moveFourbar(100);
+	// } else if (joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+	// 	moveFourbar(-100);
+	// } else {
+	// 	moveFourbar(0);
+	// }
+	moveFourbar(-joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
 }
 
 void Hamburger::moveFourbar(int power) {
