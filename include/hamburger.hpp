@@ -29,17 +29,17 @@ using namespace okapi;
 class Hamburger {
 	private:
 		static Hamburger* robot;
-		std::shared_ptr<MotorGroup> intake;
-		std::shared_ptr<MotorGroup> fourbar;
-		std::shared_ptr<MotorGroup> arm;
 		Hamburger();
 		int lastUp = 0;
 		int lastDown = 0;
 		double fourbarMinVel = 15;
 		double fourbarUpValue = 515; //when tray is 90 deg
-		double fourbarGain = 0.5;
+		double fourbarGain = 0.55;
 	public:
 		static Hamburger* getRobot();
+		std::shared_ptr<MotorGroup> intake;
+		std::shared_ptr<MotorGroup> fourbar;
+		std::shared_ptr<MotorGroup> arm;
 		std::shared_ptr<Drive> drive;
 		std::shared_ptr<BrainDriver> brainDriver;
 		void opControlIntake(pros::Controller& joystick);

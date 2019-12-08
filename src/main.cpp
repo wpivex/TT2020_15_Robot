@@ -61,7 +61,18 @@ void competition_initialize() {}
  */
 void autonomous() {
 	auto robot = Hamburger::getRobot();
+	robot->drive->chassis->getModel()->setMaxVelocity(30);
+
+
+	robot->arm->moveAbsolute(300, 70);
+
+	pros::delay(2000);
+
 	robot->drive->chassis->moveDistance(24_in);
+
+	robot->intake->moveVelocity(200);
+	robot->arm->moveAbsolute(10, 30);
+
 	// robot->drive->chassis->driveToPoint({24_in,24_in});
 	// robot->drive->chassis->stop();
 
@@ -124,5 +135,7 @@ void opcontrol() {
 
 	while (true) {
 		robot->opControl(master);
+		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
+		printf("%d,%d",vals[0],vals[1]);
 	}
 }
