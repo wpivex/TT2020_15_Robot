@@ -124,9 +124,5 @@ void opcontrol() {
 
 	while (true) {
 		robot->opControl(master);
-		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
-		pros::lcd::set_text(1, "Left Enc: " + std::to_string(vals[0]));
-		pros::lcd::set_text(2, "Right Enc: " + std::to_string(vals[1]));
-		pros::delay(20);
 	}
 }
