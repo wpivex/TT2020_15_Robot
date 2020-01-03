@@ -33,7 +33,7 @@ class Hamburger {
 		int lastUp = 0;
 		int lastDown = 0;
 		double fourbarMinVel = 15;
-		double fourbarUpValue = 515; //when tray is 90 deg
+		double fourbarUpValue = 580; //when tray is 90 deg
 		double fourbarGain = 0.55;
 	public:
 		static Hamburger* getRobot();
