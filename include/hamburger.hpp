@@ -20,10 +20,10 @@ using namespace okapi;
 #define ARM_LEFT 14
 #define ARM_RIGHT 5
 
-// #define ENCODER_LEFT_DRIVE_TOP 'a'
-// #define ENCODER_LEFT_DRIVE_BOT 'b'
-// #define ENCODER_RIGHT_DRIVE_TOP 'c'
-// #define ENCODER_RIGHT_DRIVE_BOT 'd'
+#define ENCODER_LEFT_DRIVE_TOP 'a'
+#define ENCODER_LEFT_DRIVE_BOT 'b'
+#define ENCODER_RIGHT_DRIVE_TOP 'c'
+#define ENCODER_RIGHT_DRIVE_BOT 'd'
 
 
 class Hamburger {
