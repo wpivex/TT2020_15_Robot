@@ -32,9 +32,11 @@ class Hamburger {
 		Hamburger();
 		int lastUp = 0;
 		int lastDown = 0;
-		double fourbarMinVel = 15;
-		double fourbarUpValue = 580; //when tray is 90 deg
-		double fourbarGain = 0.55;
+		double fourbarMinVel = 25;
+		double fourbarUpValue = 610; //when tray is 90 deg
+		double fourbarGain = 0.70;
+
+		double armStopPos = 5;
 	public:
 		static Hamburger* getRobot();
 		std::shared_ptr<MotorGroup> intake;

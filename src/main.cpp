@@ -136,6 +136,7 @@ void opcontrol() {
 	while (true) {
 		robot->opControl(master);
 		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
-		printf("%d,%d",vals[0],vals[1]);
+		printf("%d,%d\n",vals[0],vals[1]);
+		pros::delay(20);
 	}
 }

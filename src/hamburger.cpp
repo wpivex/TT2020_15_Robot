@@ -45,12 +45,17 @@ void Hamburger::runArm(int power) {
 }
 
 void Hamburger::opControlArm(pros::Controller &joystick) {
-	arm->moveVelocity(joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+	int32_t speed = joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+	if(speed < 0 && arm->getPosition() <= armStopPos) {
+			arm->moveVelocity(0);
+	} else {
+		arm->moveVelocity(speed);
+	}
 }
 
 void Hamburger::opControlIntake(pros::Controller &joystick) {
-	int l1 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
-	int l2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
+	int l1 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
+	int l2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
 
 	if (l2) {
 		runIntake(200);
@@ -66,6 +71,7 @@ void Hamburger::opControlIntake(pros::Controller &joystick) {
 void Hamburger::moveFourbar(int power) {
 	// if going up, throttle the value
 	if(power > 0) {
+		pros::lcd::set_text(2, "Fourbar Pos: " + std::to_string(fourbar->getPosition()));
 		double fourbarPos = fourbar->getPosition();
 		double numerator = (fourbarUpValue - fourbarPos) * fourbarGain;
 		double ratio = (double)(abs(numerator)) / fourbarUpValue;
@@ -81,6 +87,7 @@ void Hamburger::moveFourbar(int power) {
 
 		fourbar->moveVelocity(velocity);
 
+		pros::lcd::set_text(1, "Fourbar velocity: " + std::to_string(velocity));
 	} else {
 		// full speed down
 		fourbar->moveVelocity(power);
