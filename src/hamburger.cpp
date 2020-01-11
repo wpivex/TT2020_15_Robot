@@ -44,6 +44,14 @@ void Hamburger::runArm(int power) {
 	arm->moveVelocity(power);
 }
 
+void Hamburger::armUp(int vel) {
+	arm->moveAbsolute(550, vel);
+}
+
+void Hamburger::armDown(int vel) {
+	arm->moveAbsolute(0, vel);
+}
+
 void Hamburger::opControlArm(pros::Controller &joystick) {
 	int32_t speed = joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
 	if(speed < 0 && arm->getPosition() <= armStopPos) {

@@ -15,20 +15,21 @@ Drive::Drive() {
     leftMotors->setBrakeMode(AbstractMotor::brakeMode::coast);
     rightMotors->setBrakeMode(AbstractMotor::brakeMode::coast);
 
-    leftEncoder = std::make_shared<ADIEncoder>(ENCODER_LEFT_DRIVE_TOP, ENCODER_LEFT_DRIVE_BOT, false);
-    rightEncoder = std::make_shared<ADIEncoder>(ENCODER_RIGHT_DRIVE_TOP, ENCODER_RIGHT_DRIVE_BOT, true);
+    // leftEncoder = std::make_shared<ADIEncoder>(ENCODER_LEFT_DRIVE_TOP, ENCODER_LEFT_DRIVE_BOT, true);
+    // rightEncoder = std::make_shared<ADIEncoder>(ENCODER_RIGHT_DRIVE_TOP, ENCODER_RIGHT_DRIVE_BOT, false);
 
     chassis = ChassisControllerBuilder()
                 .withMotors(leftMotors, rightMotors)
                 .withGearset(AbstractMotor::gearset::green)
-                .withDimensions({{3.25_in, 10.3_in},imev5GreenTPR*3/5})
+                .withDimensions({{3.25_in, 10.3_in},(int32_t)((3.0 * imev5GreenTPR)/5.0)})
                 .withGains(
                     // {0.0015, 0, 0.000005}, // Distance controller gains
                     {0.0015, 0, 0.000005}, // Distance controller gains
                     {0.0015, 0, 0.000005}, // turn controller gains
                     {0.000005, 0, 0.00000}  // angle controller gains (helps drive straight)
                 )
-                .withSensors(leftEncoder, rightEncoder)
+                // .withSensors(leftEncoder, rightEncoder)
+                // .withClosedLoopControllerTimeUtil(50, 5, 250_ms)
                 .withOdometry(StateMode::CARTESIAN, 0_mm, 0_deg, 0.0001_mps)
                 //TODO: This is wrong^ see encoder value printouts in terminal. Also left enc doesn't work
                 .buildOdometry();

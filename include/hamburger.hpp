@@ -20,10 +20,10 @@ using namespace okapi;
 #define ARM_LEFT 14
 #define ARM_RIGHT 5
 
-#define ENCODER_LEFT_DRIVE_TOP 'a'
-#define ENCODER_LEFT_DRIVE_BOT 'b'
-#define ENCODER_RIGHT_DRIVE_TOP 'c'
-#define ENCODER_RIGHT_DRIVE_BOT 'd'
+// #define ENCODER_LEFT_DRIVE_TOP 'e'
+// #define ENCODER_LEFT_DRIVE_BOT 'f'
+// #define ENCODER_RIGHT_DRIVE_TOP 'c'
+// #define ENCODER_RIGHT_DRIVE_BOT 'd'
 
 
 class Hamburger {
@@ -50,6 +50,8 @@ class Hamburger {
 		void opControl(pros::Controller& joystick);
 		void runIntake(int power);
 		void runArm(int power);
+		void armUp(int vel=50);
+		void armDown(int vel=50);
 		void moveFourbar(int power);
 		void tiltFourbarScore();
 		void tiltFourbarRetract();

@@ -61,17 +61,51 @@ void competition_initialize() {}
  */
 void autonomous() {
 	auto robot = Hamburger::getRobot();
-	robot->drive->chassis->getModel()->setMaxVelocity(30);
+	robot->drive->chassis->getModel()->setMaxVelocity(50);
 
 
-	robot->arm->moveAbsolute(300, 70);
+	// robot->arm->moveAbsolute(300, 70);
+	// robot->drive->chassis->moveDistance(900);
+	// pros::delay(500);
+	// robot->drive->chassis->moveDistance(-800);
+	// pros::delay(2000);
 
+	// DEPLOY
+	robot->armUp(200);
+	pros::delay(1500);
+	robot->armDown(200);
+	pros::delay(1500);
+
+	// Move forward, kick cube in way
+	robot->runIntake(-100);
+	robot->drive->chassis->moveDistance(2450);
+	// Turn to stack
+	robot->drive->chassis->turnAngle(-100_deg);
+	robot->armUp();
+	pros::delay(1000);
+	robot->runIntake(200);
+	robot->drive->chassis->moveDistance(400);
+	pros::delay(1000);
+	robot->drive->chassis->moveDistanceAsync(300);
+	robot->armDown(200);
+	pros::delay(1000);
+	robot->drive->chassis->moveDistanceAsync(-200);
+	robot->drive->chassis->turnAngle(80_deg);
+	robot->drive->chassis->moveDistanceAsync(550);
+	pros::delay(2000);
+	robot->drive->chassis->moveDistanceAsync(-550);
+	pros::delay(2000);
+	robot->drive->chassis->turnAngle(110);
 	pros::delay(2000);
 
-	robot->drive->chassis->moveDistance(24_in);
 
-	robot->intake->moveVelocity(200);
-	robot->arm->moveAbsolute(10, 30);
+
+
+
+	// robot->drive->chassis->moveDistance(24_in);
+
+	// robot->intake->moveVelocity(200);
+	// robot->arm->moveAbsolute(10, 30);
 
 	// robot->drive->chassis->driveToPoint({24_in,24_in});
 	// robot->drive->chassis->stop();
@@ -125,7 +159,9 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+#define AUTO_DEBUG 1
 void opcontrol() {
+
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	auto robot = Hamburger::getRobot();
 	// ADIEncoder encL(ENCODER_LEFT_DRIVE_TOP,ENCODER_LEFT_DRIVE_BOT,false);
@@ -133,10 +169,29 @@ void opcontrol() {
 	// encL.reset();
 	// encR.reset();
 
+	char lcdText[30], armPos[30];
+
 	while (true) {
 		robot->opControl(master);
 		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
-		printf("%d,%d\n",vals[0],vals[1]);
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+			autonomous();
+		}
+		// printf("%d,%d\n",vals[0],vals[1]);
+		#if AUTO_DEBUG
+			sprintf(lcdText, "L: %4d R: %4d", vals[0], vals[1]);
+			sprintf(armPos, "Arm: %4f", robot->arm->getPosition());
+			// sprintf(lcdText[1], "Right: %d", vals[1]);
+			// pros::lcd::set_text(2, "Left");
+			pros::lcd::set_text(2, lcdText);
+			pros::lcd::set_text(3, armPos);
+			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+				printf("%d,%d\n",vals[0],vals[1]);
+				robot->drive->chassis->getModel()->resetSensors();
+				pros::delay(200);
+			}
+		#endif
+
 		pros::delay(20);
 	}
 }
