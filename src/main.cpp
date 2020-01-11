@@ -84,19 +84,39 @@ void autonomous() {
 	robot->armUp();
 	pros::delay(1000);
 	robot->runIntake(200);
-	robot->drive->chassis->moveDistance(400);
+	// Move fwd to stack
+	robot->drive->chassis->moveDistance(450);
 	pros::delay(1000);
+	// Pick up v stack while moving
 	robot->drive->chassis->moveDistanceAsync(300);
 	robot->armDown(200);
 	pros::delay(1000);
-	robot->drive->chassis->moveDistanceAsync(-200);
+	// move back, tur, move up to grab cube
+	robot->drive->chassis->moveDistance(-200);
 	robot->drive->chassis->turnAngle(80_deg);
-	robot->drive->chassis->moveDistanceAsync(550);
+	robot->drive->chassis->moveDistance(580);// 550
+	// move back and turn
+	robot->drive->chassis->moveDistance(-580);
+	robot->drive->chassis->turnAngle(155_deg);
+	// Pick up other cube maybe
+	robot->drive->chassis->moveDistance(600);//!!!
+	robot->drive->chassis->moveDistance(-600);
+	// Turn and pick up last cube before preload
+	robot->drive->chassis->turnAngle(125_deg);
+	robot->drive->chassis->moveDistance(1100);
+	// Swing turn ish in to catch cube if it's caught at a diagonal
+	robot->drive->chassis->moveDistanceAsync(200);
+	pros::delay(200);// yeah I know - it's fine
+	robot->drive->chassis->turnAngle(-80_deg);
+	// Pick up preload
+	robot->drive->chassis->moveDistance(1000);
+	robot->drive->chassis->moveDistance(-200);
+	// Swing turn towards goal
+	robot->drive->chassis->turnAngle(-50_deg);
 	pros::delay(2000);
-	robot->drive->chassis->moveDistanceAsync(-550);
-	pros::delay(2000);
-	robot->drive->chassis->turnAngle(110);
-	pros::delay(2000);
+	// Go for the goal!
+	robot->drive->chassis->moveDistance(900);
+	robot->drive->chassis->turnAngle(-50_deg);
 
 
 
@@ -159,7 +179,7 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-#define AUTO_DEBUG 1
+#define AUTO_DEBUG 0
 void opcontrol() {
 
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
@@ -174,11 +194,11 @@ void opcontrol() {
 	while (true) {
 		robot->opControl(master);
 		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-			autonomous();
-		}
-		// printf("%d,%d\n",vals[0],vals[1]);
 		#if AUTO_DEBUG
+			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+				autonomous();
+			}
+		// printf("%d,%d\n",vals[0],vals[1]);
 			sprintf(lcdText, "L: %4d R: %4d", vals[0], vals[1]);
 			sprintf(armPos, "Arm: %4f", robot->arm->getPosition());
 			// sprintf(lcdText[1], "Right: %d", vals[1]);
