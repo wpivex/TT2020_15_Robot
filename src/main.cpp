@@ -63,13 +63,21 @@ void autonomous() {
 	auto robot = Hamburger::getRobot();
 	robot->drive->chassis->getModel()->setMaxVelocity(50);
 
-	robot->drive->chassis->setTurnsMirrored(true);
 
 	// robot->arm->moveAbsolute(300, 70);
 	// robot->drive->chassis->moveDistance(900);
 	// pros::delay(500);
 	// robot->drive->chassis->moveDistance(-800);
 	// pros::delay(2000);
+
+	// SET COLOR
+	#ifdef BLUE
+	robot->drive->chassis->setTurnsMirrored(false);
+	#endif
+
+	#ifdef RED
+	robot->drive->chassis->setTurnsMirrored(true);
+	#endif
 
 	// DEPLOY
 	robot->armUp(200);
@@ -81,13 +89,12 @@ void autonomous() {
 	robot->runIntake(-100);
 	robot->drive->chassis->moveDistance(2450);
 	// Turn to stack
-	robot->drive->chassis->turnAngle(-100_deg);
+	robot->drive->chassis->turnAngle(-105_deg);
 	robot->armUp();
 	pros::delay(1000);
 	robot->runIntake(200);
 	// Move fwd to stack
 	robot->drive->chassis->moveDistance(450);
-	pros::delay(1000);
 	// Pick up v stack while moving
 	robot->drive->chassis->moveDistanceAsync(300);
 	robot->armDown(200);
@@ -117,9 +124,21 @@ void autonomous() {
 	pros::delay(2000);
 	// Go for the goal!
 	robot->drive->chassis->moveDistance(900);
-	robot->drive->chassis->turnAngle(-50_deg);
+	robot->drive->chassis->turnAngle(-45_deg);
 
 
+	// #define AUTO=1
+	// #if AUTO
+	// Score
+	robot->drive->chassis->moveDistance(800);
+	// Tray
+	robot->tiltFourbarScore();
+	robot->drive->chassis->moveDistanceAsync(300);
+	// Outtake for 1/2s
+	pros::delay(500);
+	// Retract
+	robot->drive->chassis->moveDistance(-900);
+	// #endif
 
 
 
@@ -199,7 +218,7 @@ void opcontrol() {
 			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
 				autonomous();
 			}
-		// printf("%d,%d\n",vals[0],vals[1]);
+			// printf("%d,%d\n",vals[0],vals[1]);
 			sprintf(lcdText, "L: %4d R: %4d", vals[0], vals[1]);
 			sprintf(armPos, "Arm: %4f", robot->arm->getPosition());
 			// sprintf(lcdText[1], "Right: %d", vals[1]);
@@ -207,7 +226,7 @@ void opcontrol() {
 			pros::lcd::set_text(2, lcdText);
 			pros::lcd::set_text(3, armPos);
 			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-				printf("%d,%d\n",vals[0],vals[1]);
+				// printf("%d,%d\n",vals[0],vals[1]);
 				robot->drive->chassis->getModel()->resetSensors();
 				pros::delay(200);
 			}

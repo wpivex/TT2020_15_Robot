@@ -111,3 +111,27 @@ void Hamburger::opControlFourbar(pros::Controller& joystick) {
 		moveFourbar(0);
 	}
 }
+
+void Hamburger::tiltFourbarScore() {
+	fourbar->tarePosition();
+
+	for(int i = 0; i < 50; i++) {
+		double numerator = (fourbarUpValue - fourbar->getPosition()) * fourbarGain;
+		double ratio = (double)(abs(numerator)) / fourbarUpValue;
+		int velocity = 100 * ratio;
+
+		if(velocity < fourbarMinVel) {
+			velocity = fourbarMinVel;
+		}
+		fourbar->moveVelocity(velocity);
+
+		pros::delay(100);
+	}
+
+	pros::delay(500);
+}
+
+void Hamburger::tiltFourbarRetract() {
+	// fourbar->tarePosition();
+	fourbar->moveAbsolute(0,100);
+}
