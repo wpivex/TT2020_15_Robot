@@ -63,6 +63,7 @@ void autonomous() {
 	auto robot = Hamburger::getRobot();
 	robot->drive->chassis->getModel()->setMaxVelocity(50);
 
+	robot->drive->chassis->setTurnsMirrored(true);
 
 	// robot->arm->moveAbsolute(300, 70);
 	// robot->drive->chassis->moveDistance(900);
