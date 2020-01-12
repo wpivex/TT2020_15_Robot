@@ -64,12 +64,15 @@ void Hamburger::opControlArm(pros::Controller &joystick) {
 void Hamburger::opControlIntake(pros::Controller &joystick) {
 	int l1 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
 	int l2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
+	int u  = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_UP);
 
 	if (l2) {
 		runIntake(200);
 	}
 	else if (l1) {
 		runIntake(-200);
+	} else if (u) {
+		runIntake(-100);
 	}
 	else {
 		runIntake(0);

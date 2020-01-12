@@ -61,16 +61,18 @@ void competition_initialize() {}
  */
 void autonomous() {
 	auto robot = Hamburger::getRobot();
-	robot->drive->chassis->getModel()->setMaxVelocity(50);
+	robot->drive->chassis->getModel()->setMaxVelocity(55);
 
-	robot->drive->chassis->setTurnsMirrored(true);
+	// #ifdef RED
+	robot->drive->chassis->setTurnsMirrored(false);
+	// #endif
 
 	// robot->arm->moveAbsolute(300, 70);
 	// robot->drive->chassis->moveDistance(900);
 	// pros::delay(500);
 	// robot->drive->chassis->moveDistance(-800);
 	// pros::delay(2000);
-
+	// robot->drive->chassis->setTurnsMirrored(false);
 	// DEPLOY
 	robot->armUp(200);
 	pros::delay(1500);
@@ -78,7 +80,7 @@ void autonomous() {
 	pros::delay(1500);
 
 	// Move forward, kick cube in way
-	robot->runIntake(-100);
+	robot->runIntake(-200);
 	robot->drive->chassis->moveDistance(2450);
 	// Turn to stack
 	robot->drive->chassis->turnAngle(-100_deg);
@@ -103,7 +105,7 @@ void autonomous() {
 	robot->drive->chassis->moveDistance(600);//!!!
 	robot->drive->chassis->moveDistance(-600);
 	// Turn and pick up last cube before preload
-	robot->drive->chassis->turnAngle(125_deg);
+	robot->drive->chassis->turnAngle(120_deg);
 	robot->drive->chassis->moveDistance(1100);
 	// Swing turn ish in to catch cube if it's caught at a diagonal
 	robot->drive->chassis->moveDistanceAsync(200);
