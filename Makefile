@@ -13,8 +13,13 @@ SRCDIR=$(ROOT)/src
 INCDIR=$(ROOT)/include
 
 WARNFLAGS+=
+ifdef TEAM
 EXTRA_CFLAGS= -D $(TEAM)
 EXTRA_CXXFLAGS= -D $(TEAM)
+else
+EXTRA_CFLAGS=
+EXTRA_CXXFLAGS=
+endif
 
 # Set to 1 to enable hot/cold linking
 USE_PACKAGE:=1
