@@ -1,7 +1,6 @@
 #pragma once
 #include "main.h"
 #include "drive.hpp"
-#include "brainDriver.hpp"
 using namespace okapi;
 
 #define DRIVE_LEFT_FRONT 18
@@ -26,10 +25,10 @@ using namespace okapi;
 // #define ENCODER_RIGHT_DRIVE_BOT 'd'
 
 
-class Hamburger {
+class Sbeve {
 	private:
-		static Hamburger* robot;
-		Hamburger();
+		static Sbeve* robot;
+		Sbeve();
 		int lastUp = 0;
 		int lastDown = 0;
 		double fourbarMinVel = 25;
@@ -38,12 +37,11 @@ class Hamburger {
 
 		double armStopPos = 5;
 	public:
-		static Hamburger* getRobot();
+		static Sbeve* getRobot();
 		std::shared_ptr<MotorGroup> intake;
 		std::shared_ptr<MotorGroup> fourbar;
 		std::shared_ptr<MotorGroup> arm;
 		std::shared_ptr<Drive> drive;
-		std::shared_ptr<BrainDriver> brainDriver;
 		void opControlIntake(pros::Controller& joystick);
 		void opControlFourbar(pros::Controller& joystick);
 		void opControlArm(pros::Controller& joystick);

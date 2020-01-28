@@ -1,14 +1,14 @@
-#include "hamburger.hpp"
+#include "Sbeve.hpp"
 
-Hamburger *Hamburger::robot = NULL;
-Hamburger *Hamburger::getRobot() {
+Sbeve *Sbeve::robot = NULL;
+Sbeve *Sbeve::getRobot() {
 	if (robot == NULL) {
-		robot = new Hamburger();
+		robot = new Sbeve();
 	}
 	return robot;
 }
 
-Hamburger::Hamburger() {
+Sbeve::Sbeve() {
 	drive = std::make_shared<Drive>();
 
 	MotorGroup intakeMotors({Motor(INTAKE_LEFT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
@@ -29,30 +29,30 @@ Hamburger::Hamburger() {
 	// brainDriver = std::make_shared<BrainDriver>(BrainDriver());
 }
 
-void Hamburger::opControl(pros::Controller &joystick) {
+void Sbeve::opControl(pros::Controller &joystick) {
 	drive->opControlDrive(joystick);
 	opControlFourbar(joystick);
 	opControlIntake(joystick);
 	opControlArm(joystick);
 }
 
-void Hamburger::runIntake(int power) {
+void Sbeve::runIntake(int power) {
 	intake->moveVelocity(power);
 }
 
-void Hamburger::runArm(int power) {
+void Sbeve::runArm(int power) {
 	arm->moveVelocity(power);
 }
 
-void Hamburger::armUp(int vel) {
+void Sbeve::armUp(int vel) {
 	arm->moveAbsolute(550, vel);
 }
 
-void Hamburger::armDown(int vel) {
+void Sbeve::armDown(int vel) {
 	arm->moveAbsolute(0, vel);
 }
 
-void Hamburger::opControlArm(pros::Controller &joystick) {
+void Sbeve::opControlArm(pros::Controller &joystick) {
 	int32_t speed = joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
 	if(speed < 0 && arm->getPosition() <= armStopPos) {
 			arm->moveVelocity(0);
@@ -61,7 +61,7 @@ void Hamburger::opControlArm(pros::Controller &joystick) {
 	}
 }
 
-void Hamburger::opControlIntake(pros::Controller &joystick) {
+void Sbeve::opControlIntake(pros::Controller &joystick) {
 	int l1 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
 	int l2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
 	int u  = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_UP);
@@ -79,7 +79,7 @@ void Hamburger::opControlIntake(pros::Controller &joystick) {
 	}
 }
 
-void Hamburger::moveFourbar(int power) {
+void Sbeve::moveFourbar(int power) {
 	// if going up, throttle the value
 	if(power > 0) {
 		pros::lcd::set_text(2, "Fourbar Pos: " + std::to_string(fourbar->getPosition()));
@@ -105,7 +105,7 @@ void Hamburger::moveFourbar(int power) {
 	}
 }
 
-void Hamburger::opControlFourbar(pros::Controller& joystick) {
+void Sbeve::opControlFourbar(pros::Controller& joystick) {
 	if (joystick.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 		moveFourbar(100);
 	} else if (joystick.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
@@ -115,7 +115,7 @@ void Hamburger::opControlFourbar(pros::Controller& joystick) {
 	}
 }
 
-void Hamburger::tiltFourbarScore() {
+void Sbeve::tiltFourbarScore() {
 	fourbar->tarePosition();
 
 	for(int i = 0; i < 50; i++) {
@@ -134,7 +134,7 @@ void Hamburger::tiltFourbarScore() {
 	pros::delay(500);
 }
 
-void Hamburger::tiltFourbarRetract() {
+void Sbeve::tiltFourbarRetract() {
 	// fourbar->tarePosition();
 	fourbar->moveAbsolute(0,100);
 }
