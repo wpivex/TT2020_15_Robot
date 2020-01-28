@@ -20,8 +20,7 @@ Drive::Drive() {
 
     chassis = ChassisControllerBuilder()
                 .withMotors(leftMotors, rightMotors)
-                .withGearset(AbstractMotor::gearset::green)
-                .withDimensions({{3.25_in, 10.3_in},(int32_t)((3.0 * imev5GreenTPR)/5.0)})
+                .withDimensions(AbstractMotor::gearset::green, {{3.25_in, 10.3_in},1024})
                 .withGains(
                     // {0.0015, 0, 0.000005}, // Distance controller gains
                     {0.0015, 0, 0.000005}, // Distance controller gains
@@ -30,7 +29,7 @@ Drive::Drive() {
                 )
                 // .withSensors(leftEncoder, rightEncoder)
                 // .withClosedLoopControllerTimeUtil(50, 5, 250_ms)
-                .withOdometry(StateMode::CARTESIAN, 0_mm, 0_deg, 0.0001_mps)
+                .withOdometry({{3.25_in, 10.3_in},1024}, StateMode::CARTESIAN, 0_mm, 0_deg)
                 //TODO: This is wrong^ see encoder value printouts in terminal. Also left enc doesn't work
                 .buildOdometry();
 }
