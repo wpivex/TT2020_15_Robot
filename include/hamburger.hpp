@@ -33,8 +33,8 @@ class Hamburger {
 		int lastUp = 0;
 		int lastDown = 0;
 		double fourbarMinVel = 25;
-		double fourbarUpValue = 600; //when tray is 90 deg
-		double fourbarGain = 0.70;
+		double fourbarUpValue = 625; //when tray is 90 deg
+		double fourbarGain = 0.8;
 
 		double armStopPos = 5;
 	public:
