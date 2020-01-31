@@ -1,4 +1,4 @@
-#include "Sbeve.hpp"
+#include "SheBelieved.hpp"
 #include "main.h"
 
 /**
@@ -13,7 +13,7 @@
  * from where it left off.
  */
 void autonomous() {
-	auto robot = Sbeve::getRobot();
+	auto robot = SheBelieved::getRobot();
 	robot->drive->chassis->getModel()->setMaxVelocity(55);
 
 	// SET COLOR

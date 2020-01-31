@@ -1,6 +1,7 @@
 #pragma once
 #include "main.h"
-#include "drive.hpp"
+#include "Drive.hpp"
+#include "Lift.hpp"
 using namespace okapi;
 
 #define DRIVE_LEFT_FRONT 18
@@ -19,16 +20,16 @@ using namespace okapi;
 #define ARM_LEFT 14
 #define ARM_RIGHT 5
 
-// #define ENCODER_LEFT_DRIVE_TOP 'e'
-// #define ENCODER_LEFT_DRIVE_BOT 'f'
-// #define ENCODER_RIGHT_DRIVE_TOP 'c'
-// #define ENCODER_RIGHT_DRIVE_BOT 'd'
+#define ENCODER_LEFT_DRIVE_TOP 'c'
+#define ENCODER_LEFT_DRIVE_BOT 'd'
+#define ENCODER_RIGHT_DRIVE_TOP 'e'
+#define ENCODER_RIGHT_DRIVE_BOT 'f'
 
 
-class Sbeve {
+class SheBelieved {
 	private:
-		static Sbeve* robot;
-		Sbeve();
+		static SheBelieved* robot;
+		SheBelieved();
 		int lastUp = 0;
 		int lastDown = 0;
 		double fourbarMinVel = 25;
@@ -37,14 +38,13 @@ class Sbeve {
 
 		double armStopPos = 5;
 	public:
-		static Sbeve* getRobot();
+		static SheBelieved* getRobot();
 		std::shared_ptr<MotorGroup> intake;
 		std::shared_ptr<MotorGroup> fourbar;
-		std::shared_ptr<MotorGroup> arm;
+		std::shared_ptr<Lift> lift;
 		std::shared_ptr<Drive> drive;
 		void opControlIntake(pros::Controller& joystick);
 		void opControlFourbar(pros::Controller& joystick);
-		void opControlArm(pros::Controller& joystick);
 		void opControl(pros::Controller& joystick);
 		void runIntake(int power);
 		void runArm(int power);

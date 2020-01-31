@@ -1,15 +1,16 @@
-#include "Sbeve.hpp"
+#include "SheBelieved.hpp"
 
-Sbeve *Sbeve::robot = NULL;
-Sbeve *Sbeve::getRobot() {
+SheBelieved *SheBelieved::robot = NULL;
+SheBelieved *SheBelieved::getRobot() {
 	if (robot == NULL) {
-		robot = new Sbeve();
+		robot = new SheBelieved();
 	}
 	return robot;
 }
 
-Sbeve::Sbeve() {
+SheBelieved::SheBelieved() {
 	drive = std::make_shared<Drive>();
+	lift = std::make_shared<Lift>();
 
 	MotorGroup intakeMotors({Motor(INTAKE_LEFT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
 							 						 Motor(INTAKE_RIGHT, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees)});
@@ -20,48 +21,20 @@ Sbeve::Sbeve() {
 						  							Motor(FOURBAR_RIGHT, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees)});
 	fourbar = std::make_shared<MotorGroup>(fourbarMotors);
 	fourbar->setBrakeMode(AbstractMotor::brakeMode::coast);
-
-	MotorGroup armMotors({Motor(ARM_LEFT, true, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees),
-						  							Motor(ARM_RIGHT, false, AbstractMotor::gearset::red, AbstractMotor::encoderUnits::degrees)});
-	armMotors.setBrakeMode(AbstractMotor::brakeMode::hold);
-	arm = std::make_shared<MotorGroup>(armMotors);
-
-	// brainDriver = std::make_shared<BrainDriver>(BrainDriver());
 }
 
-void Sbeve::opControl(pros::Controller &joystick) {
+void SheBelieved::opControl(pros::Controller &joystick) {
 	drive->opControlDrive(joystick);
+	lift->opControl(joystick);
 	opControlFourbar(joystick);
 	opControlIntake(joystick);
-	opControlArm(joystick);
 }
 
-void Sbeve::runIntake(int power) {
+void SheBelieved::runIntake(int power) {
 	intake->moveVelocity(power);
 }
 
-void Sbeve::runArm(int power) {
-	arm->moveVelocity(power);
-}
-
-void Sbeve::armUp(int vel) {
-	arm->moveAbsolute(550, vel);
-}
-
-void Sbeve::armDown(int vel) {
-	arm->moveAbsolute(0, vel);
-}
-
-void Sbeve::opControlArm(pros::Controller &joystick) {
-	int32_t speed = joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-	if(speed < 0 && arm->getPosition() <= armStopPos) {
-			arm->moveVelocity(0);
-	} else {
-		arm->moveVelocity(speed);
-	}
-}
-
-void Sbeve::opControlIntake(pros::Controller &joystick) {
+void SheBelieved::opControlIntake(pros::Controller &joystick) {
 	int l1 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
 	int l2 = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
 	int u  = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_UP);
@@ -79,7 +52,7 @@ void Sbeve::opControlIntake(pros::Controller &joystick) {
 	}
 }
 
-void Sbeve::moveFourbar(int power) {
+void SheBelieved::moveFourbar(int power) {
 	// if going up, throttle the value
 	if(power > 0) {
 		pros::lcd::set_text(2, "Fourbar Pos: " + std::to_string(fourbar->getPosition()));
@@ -105,7 +78,7 @@ void Sbeve::moveFourbar(int power) {
 	}
 }
 
-void Sbeve::opControlFourbar(pros::Controller& joystick) {
+void SheBelieved::opControlFourbar(pros::Controller& joystick) {
 	if (joystick.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 		moveFourbar(100);
 	} else if (joystick.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
@@ -115,7 +88,7 @@ void Sbeve::opControlFourbar(pros::Controller& joystick) {
 	}
 }
 
-void Sbeve::tiltFourbarScore() {
+void SheBelieved::tiltFourbarScore() {
 	fourbar->tarePosition();
 
 	for(int i = 0; i < 50; i++) {
@@ -134,7 +107,7 @@ void Sbeve::tiltFourbarScore() {
 	pros::delay(500);
 }
 
-void Sbeve::tiltFourbarRetract() {
+void SheBelieved::tiltFourbarRetract() {
 	// fourbar->tarePosition();
 	fourbar->moveAbsolute(0,100);
 }

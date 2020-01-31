@@ -1,5 +1,5 @@
 #include "main.h"
-#include "Sbeve.hpp"
+#include "SheBelieved.hpp"
 
 /**
  * A callback function for LLEMU's center button.
@@ -61,11 +61,11 @@ void competition_initialize() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-#define AUTO_DEBUG 0
+#define AUTO_DEBUG 1
 void opcontrol() {
 
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	auto robot = Sbeve::getRobot();
+	auto robot = SheBelieved::getRobot();
 	// ADIEncoder encL(ENCODER_LEFT_DRIVE_TOP,ENCODER_LEFT_DRIVE_BOT,false);
 	// ADIEncoder encR(ENCODER_RIGHT_DRIVE_TOP,ENCODER_RIGHT_DRIVE_BOT,true);
 	// encL.reset();
@@ -80,15 +80,11 @@ void opcontrol() {
 			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
 				autonomous();
 			}
-			// printf("%d,%d\n",vals[0],vals[1]);
 			sprintf(lcdText, "L: %4d R: %4d", vals[0], vals[1]);
-			sprintf(armPos, "Arm: %4f", robot->arm->getPosition());
-			// sprintf(lcdText[1], "Right: %d", vals[1]);
-			// pros::lcd::set_text(2, "Left");
+			sprintf(armPos, "Arm: %4f", robot->lift->armMotors->getPosition());
 			pros::lcd::set_text(2, lcdText);
 			pros::lcd::set_text(3, armPos);
 			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-				// printf("%d,%d\n",vals[0],vals[1]);
 				robot->drive->chassis->getModel()->resetSensors();
 				pros::delay(200);
 			}
