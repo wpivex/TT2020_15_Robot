@@ -34,7 +34,7 @@ Drive::Drive() {
                 .buildOdometry();
 }
 
-void Drive::opControlDrive(pros::Controller& joystick) {
+void Drive::opControl(pros::Controller& joystick) {
     double forward = (double)(joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)) / 127;
     double turn = (double)(joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) / 127;
     this->chassis->model().arcade(forward,turn);

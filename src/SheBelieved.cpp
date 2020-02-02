@@ -24,7 +24,7 @@ SheBelieved::SheBelieved() {
 }
 
 void SheBelieved::opControl(pros::Controller &joystick) {
-	drive->opControlDrive(joystick);
+	drive->opControl(joystick);
 	lift->opControl(joystick);
 	opControlFourbar(joystick);
 	opControlIntake(joystick);
