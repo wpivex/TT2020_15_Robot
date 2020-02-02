@@ -55,7 +55,6 @@ void SheBelieved::opControlIntake(pros::Controller &joystick) {
 void SheBelieved::moveFourbar(int power) {
 	// if going up, throttle the value
 	if(power > 0) {
-		pros::lcd::set_text(2, "Fourbar Pos: " + std::to_string(fourbar->getPosition()));
 		double fourbarPos = fourbar->getPosition();
 		double numerator = (fourbarUpValue - fourbarPos) * fourbarGain;
 		double ratio = (double)(abs(numerator)) / fourbarUpValue;
@@ -70,8 +69,6 @@ void SheBelieved::moveFourbar(int power) {
 		}
 
 		fourbar->moveVelocity(velocity);
-
-		pros::lcd::set_text(1, "Fourbar velocity: " + std::to_string(velocity));
 	} else {
 		// full speed down
 		fourbar->moveVelocity(power);
