@@ -25,6 +25,14 @@ void autonomous() {
 	robot->drive->chassis->setTurnsMirrored(true);
 	#endif
 
+	robot->drive->chassis->moveDistanceAsync(24_in);
+
+	while(pros::competition::is_autonomous) {
+		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
+		printf("L: %d, R: %d\n", vals[0], vals[1]);
+		pros::delay(10);
+	}
+	
 	// DEPLOY
 
 }
