@@ -25,10 +25,6 @@ void autonomous() {
 	robot->drive->chassis->setTurnsMirrored(true);
 	#endif
 
-<<<<<<< HEAD
-	robot->drive->chassis->moveDistance(24_in);
-
-=======
 	robot->drive->chassis->moveDistanceAsync(24_in);
 
 	while(pros::competition::is_autonomous) {
@@ -37,7 +33,6 @@ void autonomous() {
 		pros::delay(10);
 	}
 	
->>>>>>> PROS-update
 	// DEPLOY
 
 }
