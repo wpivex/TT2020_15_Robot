@@ -8,7 +8,7 @@ class Drive {
 	public:
 		Drive();
 		std::shared_ptr<okapi::OdomChassisController> chassis;
-		void opControlDrive(pros::Controller& joystick);
+		void opControl(pros::Controller& joystick);
 		std::shared_ptr<okapi::ADIEncoder> leftEncoder, rightEncoder;
 	private:
 		std::shared_ptr<MotorGroup> leftMotors;
