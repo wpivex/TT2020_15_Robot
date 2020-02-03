@@ -25,6 +25,8 @@ void autonomous() {
 	robot->drive->chassis->setTurnsMirrored(true);
 	#endif
 
+	robot->drive->chassis->moveDistance(24_in);
+
 	// DEPLOY
 
 }
