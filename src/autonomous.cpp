@@ -1,5 +1,6 @@
 #include "SheBelieved.hpp"
 #include "main.h"
+#include "menu/Menu.hpp"
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -14,6 +15,7 @@
  */
 void autonomous() {
 	auto robot = SheBelieved::getRobot();
+	auto menu = Menu::getMenu();
 	robot->drive->chassis->getModel()->setMaxVelocity(55);
 
 	// SET COLOR
@@ -27,11 +29,12 @@ void autonomous() {
 
 	robot->drive->chassis->moveDistanceAsync(24_in);
 
-	while(pros::competition::is_autonomous) {
+	while(!robot->drive->chassis->isSettled()) {
 		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
-		printf("L: %d, R: %d\n", vals[0], vals[1]);
+		printf("L: %d, R: %d, isSettled: %d\n", vals[0], vals[1], robot->drive->chassis->isSettled());
 		pros::delay(10);
 	}
+	printf("done");
 	
 	// DEPLOY
 

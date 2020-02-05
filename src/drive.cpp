@@ -24,11 +24,11 @@ Drive::Drive() {
                 .withGains(
                     // {0.0015, 0, 0.000005}, // Distance controller gains
                     {0.0015, 0, 0.000000}, // Distance controller gains
-                    {0.0015, 0, 0.000005}, // turn controller gains
+                    {0.0017, 0, 0.000005}, // turn controller gains
                     {0.0005, 0, 0.00000}  // angle controller gains (helps drive straight)
                 )
                 .withSensors(leftEncoder, rightEncoder)
-                // .withClosedLoopControllerTimeUtil(50, 5, 250_ms)
+                .withClosedLoopControllerTimeUtil(100, 50, 50_ms)
                 .withOdometry({{3.25_in, 4.5_in},1024}, StateMode::CARTESIAN, 0_mm, 0_deg)
                 .buildOdometry();
 }
