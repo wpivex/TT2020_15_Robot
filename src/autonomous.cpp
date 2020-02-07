@@ -16,7 +16,7 @@
 void autonomous() {
 	auto robot = SheBelieved::getRobot();
 	auto menu = Menu::getMenu();
-	robot->drive->chassis->getModel()->setMaxVelocity(55);
+	robot->drive->chassis->getModel()->setMaxVelocity(75);
 
 	// SET COLOR
 	#ifdef BLUE

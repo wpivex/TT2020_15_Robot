@@ -59,6 +59,7 @@ void opcontrol() {
 	while (true) {
 		robot->opControl(master);
 		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
+		printf("L: %d, R: %d, isSettled: %d\n", vals[0], vals[1], robot->drive->chassis->isSettled());
 		#if AUTO_DEBUG
 			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
 				autonomous();

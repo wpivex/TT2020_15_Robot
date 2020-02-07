@@ -11,7 +11,8 @@ Menu *Menu::getMenu() {
 
 Menu::Menu() {
     constructTabview();
-    constructDebugPage();
+    constructTerminalPage();
+    constructYusPage();
 
     
     lv_obj_t *label = lv_label_create(tabInfo, NULL);
@@ -28,11 +29,8 @@ void Menu::printTerminal(const char* str, const char end) {
 
 }
 
-
-void Menu::addYus() {
-    tabYus = lv_tabview_add_tab(tabview, "yus");
-    // lv_obj_t *yus = lv_img_create(tabYus, NULL);
-    // lv_img_set_src(yus, &orange);
+void Menu::addDebugListener(int id, const char* str) {
+    
 }
 
 void Menu::constructTabview() {
@@ -43,11 +41,8 @@ void Menu::constructTabview() {
     tabInfo = lv_tabview_add_tab(tabview, "Info");
     tabDebug = lv_tabview_add_tab(tabview, "Debug");
     tabTerminal = lv_tabview_add_tab(tabview, "Terminal");
-
-
     tabYus = lv_tabview_add_tab(tabview, "yus");
-    lv_obj_t *yus = lv_img_create(tabYus, NULL);
-    lv_img_set_src(yus, &orange);
+
 
     // Style the tab buttons
     static lv_style_t tabButtonStyle;
@@ -64,10 +59,18 @@ void Menu::constructTabview() {
     lv_tabview_set_style(tabview, LV_TABVIEW_STYLE_INDIC, &highlightedTabButtonStyle);
 }
 
-void Menu::constructDebugPage() {
-    debugTextArea = lv_ta_create(tabTerminal, NULL);
-    lv_ta_set_cursor_type(debugTextArea, LV_CURSOR_NONE);
-    lv_ta_add_text(debugTextArea, "line 1\n");
-    lv_ta_add_text(debugTextArea, "line 2\n");
-    lv_ta_add_text(debugTextArea, "line 3\n");
+void Menu::constructTerminalPage() {
+    debugTextArea = lv_label_create(tabTerminal, NULL);
+    // static lv_style_t labelStyle;
+    // labelStyle.text.font = LV_FONT_ROBOTO_12;
+    // lv_label_set_style(debugTextArea)
+
+    lv_obj_set_size(debugTextArea, 450, 160); // :(
+    
+    lv_label_set_text(debugTextArea, "hey\nhey\nhey start dash\nhey\nhey\nhey start dash\nhey\nhey");
+}
+
+void Menu::constructYusPage() {
+    lv_obj_t *yus = lv_img_create(tabYus, NULL);
+    lv_img_set_src(yus, &orange);
 }
