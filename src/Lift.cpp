@@ -14,6 +14,6 @@ void Lift::setLiftPower(int velocity) {
 }
 
 void Lift::opControl(pros::Controller& joystick) {
-    double up = (double)(joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)) / 127;
+    double up = (double)(joystick.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)) / 127 * 200;
     setLiftPower(up);
 }
