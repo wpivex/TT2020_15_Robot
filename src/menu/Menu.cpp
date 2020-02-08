@@ -94,7 +94,7 @@ void Menu::constructDebugPage() {
 void Menu::constructTerminalPage() {
     terminalTextArea = lv_label_create(tabTerminal, NULL);
     lv_obj_set_size(terminalTextArea, 450, 160); // :(
-    // lv_label_set_text(terminalTextArea, "hey\nhey\nhey start dash\nhey\nhey\nhey start dash\nhey\nhey");
+    lv_label_set_text(terminalTextArea, "");
 }
 
 void Menu::constructYusPage() {
