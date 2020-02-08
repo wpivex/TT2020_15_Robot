@@ -13,9 +13,8 @@ Menu::Menu() : terminalOutput(), debugOutput(10, "") {
     constructTabview();
     constructTerminalPage();
     constructDebugPage();
-    constructYusPage();
 
-    
+
     lv_obj_t *label = lv_label_create(tabInfo, NULL);
     lv_label_set_text(label, "help");
     #ifdef BLUE
@@ -95,9 +94,4 @@ void Menu::constructTerminalPage() {
     terminalTextArea = lv_label_create(tabTerminal, NULL);
     lv_obj_set_size(terminalTextArea, 450, 160); // :(
     lv_label_set_text(terminalTextArea, "");
-}
-
-void Menu::constructYusPage() {
-    lv_obj_t *yus = lv_img_create(tabYus, NULL);
-    lv_img_set_src(yus, &orange);
 }

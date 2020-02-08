@@ -1,13 +1,13 @@
 #pragma once
 #include "main.h"
-#include <queue> 
+#include <queue>
 
 class Menu {
     private:
         Menu();
         static Menu* menu;
         lv_obj_t *tabview;
-        
+
         lv_obj_t *tabInfo;
         lv_obj_t *tabDebug;
         lv_obj_t *tabTerminal;
@@ -23,7 +23,6 @@ class Menu {
 
         void constructTerminalPage();
         void constructDebugPage();
-        void constructYusPage();
         void constructTabview();
     public:
         static Menu* getMenu();
