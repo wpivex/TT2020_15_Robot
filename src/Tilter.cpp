@@ -46,17 +46,9 @@ void Tilter::moveFourbar(int power) {
 	// if going up, throttle the value
 	if(power > 0) {
 		double fourbarPos = fourbar->getPosition();
-		double numerator = (fourbarUpValue - fourbarPos) * fourbarGain;
-		double ratio = (double)(abs(numerator)) / fourbarUpValue;
-		int velocity = power * ratio;
-		printf("Ratio: %f\n",ratio);
-
-		if(fourbarPos >= fourbarUpValue) {
-			velocity = 0.0;
-		}
-		else if(velocity < fourbarMinVel) {
-			velocity = fourbarMinVel;
-		}
+        double diff = fourbarUpValue - fourbarPos;
+        int velocity = diff * fourbarGain;
+        velocity = velocity < fourbarMinVel ? fourbarMinVel : velocity;
 
 		fourbar->moveVelocity(velocity);
 	} else {
