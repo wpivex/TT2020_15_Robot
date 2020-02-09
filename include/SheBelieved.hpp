@@ -2,6 +2,7 @@
 #include "main.h"
 #include "Drive.hpp"
 #include "Lift.hpp"
+#include "Tilter.hpp"
 using namespace okapi;
 
 #define DRIVE_LEFT_FRONT 18
@@ -40,17 +41,13 @@ class SheBelieved {
 	public:
 		static SheBelieved* getRobot();
 		std::shared_ptr<MotorGroup> intake;
-		std::shared_ptr<MotorGroup> fourbar;
+		std::shared_ptr<Tilter> tilter;
 		std::shared_ptr<Lift> lift;
 		std::shared_ptr<Drive> drive;
 		void opControlIntake(pros::Controller& joystick);
-		void opControlFourbar(pros::Controller& joystick);
 		void opControl(pros::Controller& joystick);
 		void runIntake(int power);
 		void runArm(int power);
 		void armUp(int vel=50);
 		void armDown(int vel=50);
-		void moveFourbar(int power);
-		void tiltFourbarScore();
-		void tiltFourbarRetract();
 };

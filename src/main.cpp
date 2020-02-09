@@ -1,21 +1,6 @@
 #include "main.h"
+#include "menu/Menu.hpp"
 #include "SheBelieved.hpp"
-
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -24,10 +9,7 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
 
-	pros::lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -61,34 +43,25 @@ void competition_initialize() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-#define AUTO_DEBUG 1
+#define AUTO_DEBUG 0
 void opcontrol() {
 
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	auto robot = SheBelieved::getRobot();
+	auto Menu = Menu::getMenu();
 	// ADIEncoder encL(ENCODER_LEFT_DRIVE_TOP,ENCODER_LEFT_DRIVE_BOT,false);
 	// ADIEncoder encR(ENCODER_RIGHT_DRIVE_TOP,ENCODER_RIGHT_DRIVE_BOT,true);
 	// encL.reset();
 	// encR.reset();
 
-	char lcdText[30], armPos[30];
-
 	while (true) {
 		robot->opControl(master);
 		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
-		#if AUTO_DEBUG
-			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-				autonomous();
-			}
-			sprintf(lcdText, "L: %4d R: %4d", vals[0], vals[1]);
-			sprintf(armPos, "Arm: %4f", robot->lift->armMotors->getPosition());
-			pros::lcd::set_text(2, lcdText);
-			pros::lcd::set_text(3, armPos);
-			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-				robot->drive->chassis->getModel()->resetSensors();
-				pros::delay(200);
-			}
-		#endif
+		// printf("L: %d, R: %d, isSettled: %d\n", vals[0], vals[1], robot->drive->chassis->isSettled());
+		auto state = robot->drive->chassis->getOdometry()->getState(okapi::StateMode::CARTESIAN);
+		Menu::getMenu()->addDebugPrint(0, state.str());
+		Menu::getMenu()->addDebugPrint(1, "L: " + std::to_string(vals[0]));
+		Menu::getMenu()->addDebugPrint(2, "R: " + std::to_string(vals[1]));
 
 		pros::delay(20);
 	}
