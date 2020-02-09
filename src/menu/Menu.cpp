@@ -13,7 +13,7 @@ Menu::Menu() : terminalOutput(), debugOutput(10, "") {
     constructTabview();
     constructTerminalPage();
     constructDebugPage();
-    constructYusPage();
+    // constructYusPage();
 
     
     lv_obj_t *label = lv_label_create(tabInfo, NULL);
