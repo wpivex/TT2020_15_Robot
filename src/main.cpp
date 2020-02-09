@@ -54,32 +54,14 @@ void opcontrol() {
 	// encL.reset();
 	// encR.reset();
 
-	char lcdText[30], armPos[30];
-
-	int count = 0;
 	while (true) {
 		robot->opControl(master);
 		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
 		// printf("L: %d, R: %d, isSettled: %d\n", vals[0], vals[1], robot->drive->chassis->isSettled());
 		auto state = robot->drive->chassis->getOdometry()->getState(okapi::StateMode::CARTESIAN);
-		Menu::getMenu()->printTerminal("Nice");
-		Menu::getMenu()->addDebugPrint(2, "Nice");
-		Menu::getMenu()->addDebugPrint(3, std::to_string(count));
-		count++;
-
-		#if AUTO_DEBUG
-			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-				autonomous();
-			}
-			sprintf(lcdText, "L: %4d R: %4d", vals[0], vals[1]);
-			sprintf(armPos, "Arm: %4f", robot->lift->armMotors->getPosition());
-			pros::lcd::set_text(2, lcdText);
-			pros::lcd::set_text(3, armPos);
-			if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-				robot->drive->chassis->getModel()->resetSensors();
-				pros::delay(200);
-			}
-		#endif
+		Menu::getMenu()->addDebugPrint(0, state.str());
+		Menu::getMenu()->addDebugPrint(1, "L: " + std::to_string(vals[0]));
+		Menu::getMenu()->addDebugPrint(2, "R: " + std::to_string(vals[1]));
 
 		pros::delay(20);
 	}
