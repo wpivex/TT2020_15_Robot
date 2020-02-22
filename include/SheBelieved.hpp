@@ -14,7 +14,7 @@ using namespace okapi;
 
 #define INTAKE_LEFT 11
 #define INTAKE_RIGHT 1
-#define INTAKE_LEFT_2 4
+#define INTAKE_LEFT_2 3
 #define INTAKE_RIGHT_2 15
 
 #define FOURBAR_LEFT 20
