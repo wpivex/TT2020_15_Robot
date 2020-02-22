@@ -24,6 +24,7 @@ class Menu {
         void constructTerminalPage();
         void constructDebugPage();
         void constructTabview();
+        void constructYusPage();
     public:
         static Menu* getMenu();
         void printTerminal(const std::string str);
