@@ -15,8 +15,8 @@ SheBelieved::SheBelieved() {
 
 	MotorGroup intakeMotors({Motor(INTAKE_LEFT, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
 							 						 Motor(INTAKE_RIGHT, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
-												 	 Motor(INTAKE_LEFT_2, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
-											     Motor(INTAKE_LEFT_2, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees)});
+												 	 Motor(INTAKE_LEFT_2, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
+											     Motor(INTAKE_RIGHT_2, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees)});
 	intakeMotors.setBrakeMode(AbstractMotor::brakeMode::brake);
 	intake = std::make_shared<MotorGroup>(intakeMotors);
 }
