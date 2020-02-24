@@ -18,23 +18,23 @@ Drive::Drive()
 
     // save ports in a vector
     leftMotorPorts.reserve(3);
-    leftMotorPorts.push_back(DRIVE_LEFT_FRONT);
-    leftMotorPorts.push_back(DRIVE_LEFT_MID);
-    leftMotorPorts.push_back(DRIVE_LEFT_BACK);
+    leftMotorPorts.push_back(std::make_tuple(DRIVE_LEFT_FRONT, -1));
+    leftMotorPorts.push_back(std::make_tuple(DRIVE_LEFT_MID, 1));
+    leftMotorPorts.push_back(std::make_tuple(DRIVE_LEFT_BACK, -1));
     rightMotorPorts.reserve(3);
-    rightMotorPorts.push_back(DRIVE_RIGHT_FRONT);
-    rightMotorPorts.push_back(DRIVE_RIGHT_MID);
-    rightMotorPorts.push_back(DRIVE_RIGHT_BACK);
+    rightMotorPorts.push_back(std::make_tuple(DRIVE_RIGHT_FRONT, 1));
+    rightMotorPorts.push_back(std::make_tuple(DRIVE_RIGHT_MID, -1));
+    rightMotorPorts.push_back(std::make_tuple(DRIVE_RIGHT_BACK, 1));
 
-    leftEncoder = std::make_shared<ADIEncoder>(ENCODER_LEFT_DRIVE_TOP, ENCODER_LEFT_DRIVE_BOT, true);
+    leftEncoder = std::make_shared<ADIEncoder>(ENCODER_LEFT_DRIVE_TOP, ENCODER_LEFT_DRIVE_BOT, false);
     rightEncoder = std::make_shared<ADIEncoder>(ENCODER_RIGHT_DRIVE_TOP, ENCODER_RIGHT_DRIVE_BOT, false);
 
     std::shared_ptr<okapi::OdomChassisController> c = ChassisControllerBuilder()
                 .withMotors(leftMotors, rightMotors)
                 .withDimensions(AbstractMotor::gearset::green, {{3.25_in, 4.5_in},1024})
                 .withGains(
-                    {0.0015, 0, 0.00005}, // Distance controller gains
-                    {0.006, 0, 0.0005}, // turn controller gains
+                    {0.0013, 0, 0.00001}, // Distance controller gains
+                    {0.003, 0, 0.000}, // turn controller gains
                     {0.0005, 0, 0.00000}  // angle controller gains (helps drive straight)
                 )
                 .withSensors(leftEncoder, rightEncoder)
@@ -82,18 +82,22 @@ void Drive::opControl(pros::Controller& joystick) {
     // rightMotors->moveVoltage((forward - turn) * MAX_VOLTAGE);
     // leftMotors->moveVoltage(leftOutput * MAX_VOLTAGE);
     // rightMotors->moveVoltage(rightOutput * MAX_VOLTAGE);
+    // this->moveLeft((forward + turn * 0.7) * 127);
+    // this->moveRight((forward - turn * 0.7) * 127);
     this->moveLeft(leftOutput * 127);
     this->moveRight(rightOutput * 127);
 }
 
 void Drive::moveLeft(int power) {
-    for (int port : leftMotorPorts) {
-        pros::c::motor_move(port, power);
+    for (std::tuple<int16_t, int16_t> port : leftMotorPorts) {
+        auto [portnum, direction] = port;
+        pros::c::motor_move(portnum, power * direction);
     }
 }
 
 void Drive::moveRight(int power) {
-    for (int port : rightMotorPorts) {
-        pros::c::motor_move(port, power);
+    for (std::tuple<int16_t, int16_t> port : rightMotorPorts) {
+        auto [portnum, direction] = port;
+        pros::c::motor_move(portnum, power * direction);
     }
 }

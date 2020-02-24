@@ -70,7 +70,7 @@ void opcontrol() {
 		Menu::getMenu()->addDebugPrint(1, "L: " + std::to_string(vals[0]));
 		Menu::getMenu()->addDebugPrint(2, "R: " + std::to_string(vals[1]));
 
-		// double forward = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
+		// double forward = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
     	// double turn = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
 		// leftFront.move(forward + turn*0.7);
 		// leftMid.move(forward + turn*0.7);
