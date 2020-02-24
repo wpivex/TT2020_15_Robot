@@ -14,4 +14,9 @@ class Drive {
 	private:
 		std::shared_ptr<MotorGroup> leftMotors;
 		std::shared_ptr<MotorGroup> rightMotors;
+		std::vector<int16_t> leftMotorPorts;
+		std::vector<int16_t> rightMotorPorts;
+
+		void moveLeft(int power);
+		void moveRight(int power);
 };

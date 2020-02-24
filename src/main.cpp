@@ -54,6 +54,13 @@ void opcontrol() {
 	// encL.reset();
 	// encR.reset();
 
+	// auto leftFront = pros::Motor(DRIVE_LEFT_FRONT, true);
+	// auto leftMid = pros::Motor(DRIVE_LEFT_MID, false);
+	// auto leftBack = pros::Motor(DRIVE_LEFT_BACK, true);
+	// auto rightFront = pros::Motor(DRIVE_RIGHT_FRONT, false);
+	// auto rightMid = pros::Motor(DRIVE_RIGHT_MID, true);
+	// auto rightBack = pros::Motor(DRIVE_RIGHT_BACK, false);
+
 	while (true) {
 		robot->opControl(master);
 		std::valarray<std::int32_t> vals = robot->drive->chassis->getModel()->getSensorVals();
@@ -62,6 +69,18 @@ void opcontrol() {
 		Menu::getMenu()->addDebugPrint(0, state.str());
 		Menu::getMenu()->addDebugPrint(1, "L: " + std::to_string(vals[0]));
 		Menu::getMenu()->addDebugPrint(2, "R: " + std::to_string(vals[1]));
+
+		// double forward = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
+    	// double turn = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+		// leftFront.move(forward + turn*0.7);
+		// leftMid.move(forward + turn*0.7);
+		// leftBack.move(forward + turn*0.7);
+		// rightFront.move(forward - turn*0.7);
+		// rightMid.move(forward - turn*0.7);
+		// rightBack.move(forward - turn*0.7);
+
+
+
 
 		pros::delay(20);
 	}

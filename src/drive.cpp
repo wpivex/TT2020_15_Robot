@@ -1,7 +1,8 @@
 #include "Drive.hpp"
 #include "SheBelieved.hpp"
 
-Drive::Drive() {
+Drive::Drive()
+{
     MotorGroup left({
 					 Motor(DRIVE_LEFT_FRONT, true, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
 					 Motor(DRIVE_LEFT_MID, false, AbstractMotor::gearset::green, AbstractMotor::encoderUnits::degrees),
@@ -14,6 +15,16 @@ Drive::Drive() {
     rightMotors = std::make_shared<MotorGroup>(right);
     leftMotors->setBrakeMode(AbstractMotor::brakeMode::coast);
     rightMotors->setBrakeMode(AbstractMotor::brakeMode::coast);
+
+    // save ports in a vector
+    leftMotorPorts.reserve(3);
+    leftMotorPorts.push_back(DRIVE_LEFT_FRONT);
+    leftMotorPorts.push_back(DRIVE_LEFT_MID);
+    leftMotorPorts.push_back(DRIVE_LEFT_BACK);
+    rightMotorPorts.reserve(3);
+    rightMotorPorts.push_back(DRIVE_RIGHT_FRONT);
+    rightMotorPorts.push_back(DRIVE_RIGHT_MID);
+    rightMotorPorts.push_back(DRIVE_RIGHT_BACK);
 
     leftEncoder = std::make_shared<ADIEncoder>(ENCODER_LEFT_DRIVE_TOP, ENCODER_LEFT_DRIVE_BOT, true);
     rightEncoder = std::make_shared<ADIEncoder>(ENCODER_RIGHT_DRIVE_TOP, ENCODER_RIGHT_DRIVE_BOT, false);
@@ -35,9 +46,54 @@ Drive::Drive() {
 }
 
 void Drive::opControl(pros::Controller& joystick) {
-    double forward = (double)(joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
-    double turn = (double)(joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
-    forward = abs(forward) - 10 <=0 ? 0 : forward;
-    turn = abs(turn) - 10 <=0 ? 0 : turn;
-    this->chassis->model().arcade(forward / 127,turn / 127);
+    double forward = joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y) / 127.0;
+    double turn = joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) / 127.0;
+    // this->chassis->getModel()->arcade(forward, turn);
+
+    forward = std::clamp(forward, -1.0, 1.0);
+    turn = std::clamp(turn, -1.0, 1.0);
+    double leftOutput = 0;
+    double rightOutput = 0;
+    double max = std::copysign(std::max(std::abs(forward), std::abs(turn)), forward);
+    double MAX_VELOCITY = 200;
+    double MAX_VOLTAGE = 12000;
+
+    if(forward >= 0.0) {
+        if(turn >= 0.0) {
+            leftOutput = max;
+            rightOutput = forward - turn;
+        } else {
+            leftOutput = forward + turn;
+            rightOutput = max;
+        }
+    } else {
+        if(turn >= 0.0) {
+            leftOutput = forward + turn;
+            rightOutput = max;
+        } else {
+            leftOutput = max;
+            rightOutput = forward - turn;
+        }
+    }
+
+    leftOutput = std::clamp(leftOutput, -1.0, 1.0);
+    rightOutput = std::clamp(rightOutput, -1.0, 1.0);
+    // leftMotors->moveVoltage((forward + turn) * MAX_VOLTAGE);
+    // rightMotors->moveVoltage((forward - turn) * MAX_VOLTAGE);
+    // leftMotors->moveVoltage(leftOutput * MAX_VOLTAGE);
+    // rightMotors->moveVoltage(rightOutput * MAX_VOLTAGE);
+    this->moveLeft(leftOutput * 127);
+    this->moveRight(rightOutput * 127);
+}
+
+void Drive::moveLeft(int power) {
+    for (int port : leftMotorPorts) {
+        pros::c::motor_move(port, power);
+    }
+}
+
+void Drive::moveRight(int power) {
+    for (int port : rightMotorPorts) {
+        pros::c::motor_move(port, power);
+    }
 }
