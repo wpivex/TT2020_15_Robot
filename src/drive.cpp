@@ -61,18 +61,18 @@ void Drive::opControl(pros::Controller& joystick) {
     if(forward >= 0.0) {
         if(turn >= 0.0) {
             leftOutput = max;
-            rightOutput = forward - turn;
+            rightOutput = forward - turn * 0.7;
         } else {
-            leftOutput = forward + turn;
+            leftOutput = forward + turn * 0.7;
             rightOutput = max;
         }
     } else {
         if(turn >= 0.0) {
-            leftOutput = forward + turn;
+            leftOutput = forward + turn * 0.7;
             rightOutput = max;
         } else {
             leftOutput = max;
-            rightOutput = forward - turn;
+            rightOutput = forward - turn * 0.7;
         }
     }
 
@@ -82,16 +82,21 @@ void Drive::opControl(pros::Controller& joystick) {
     // rightMotors->moveVoltage((forward - turn) * MAX_VOLTAGE);
     // leftMotors->moveVoltage(leftOutput * MAX_VOLTAGE);
     // rightMotors->moveVoltage(rightOutput * MAX_VOLTAGE);
-    // this->moveLeft((forward + turn * 0.7) * 127);
-    // this->moveRight((forward - turn * 0.7) * 127);
-    this->moveLeft(leftOutput * 127);
-    this->moveRight(rightOutput * 127);
+    this->moveLeft((forward + turn * 0.7) * 127);
+    this->moveRight((forward - turn * 0.7) * 127);
+    // this->moveLeft(leftOutput * 200);
+    // this->moveRight(rightOutput * 200);
 }
 
 void Drive::moveLeft(int power) {
     for (std::tuple<int16_t, int16_t> port : leftMotorPorts) {
         auto [portnum, direction] = port;
         pros::c::motor_move(portnum, power * direction);
+        // if(power == 0) {
+        //     pros::c::motor_move(portnum, 0);
+        // } else {
+        //     pros::c::motor_move_velocity(portnum, power * direction);
+        // }
     }
 }
 
@@ -99,5 +104,10 @@ void Drive::moveRight(int power) {
     for (std::tuple<int16_t, int16_t> port : rightMotorPorts) {
         auto [portnum, direction] = port;
         pros::c::motor_move(portnum, power * direction);
+        // if(power == 0) {
+        //     pros::c::motor_move(portnum, 0);
+        // } else {
+        //     pros::c::motor_move_velocity(portnum, power * direction);
+        // }
     }
 }
