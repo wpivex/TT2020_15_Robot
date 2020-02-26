@@ -51,8 +51,10 @@ void Tilter::moveFourbar(int power) {
         velocity = velocity < fourbarMinVel ? fourbarMinVel : velocity;
 
 		fourbar->moveVelocity(velocity);
-	} else {
+	} else if(power < 0) {
 		// full speed down
 		fourbar->moveVelocity(power);
+	} else {
+		fourbar->moveVoltage(0);
 	}
 }

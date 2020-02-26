@@ -10,7 +10,11 @@ Lift::Lift() {
 }
 
 void Lift::setLiftPower(int velocity) {
-    armMotors->moveVelocity(velocity);
+    if(velocity != 0) {
+        armMotors->moveVelocity(velocity);
+    } else {
+        armMotors->moveVoltage(0);
+    }
 }
 
 void Lift::opControl(pros::Controller& joystick) {
