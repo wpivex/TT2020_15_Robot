@@ -69,6 +69,7 @@ void opcontrol() {
 		Menu::getMenu()->addDebugPrint(0, state.str());
 		Menu::getMenu()->addDebugPrint(1, "L: " + std::to_string(vals[0]));
 		Menu::getMenu()->addDebugPrint(2, "R: " + std::to_string(vals[1]));
+		Menu::getMenu()->addDebugPrint(3, "Arm: " + std::to_string((int)robot->lift->armMotors->getPosition()));
 
 		// double forward = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
     	// double turn = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));

@@ -33,16 +33,19 @@ Drive::Drive()
                 .withMotors(leftMotors, rightMotors)
                 .withDimensions(AbstractMotor::gearset::green, {{3.25_in, 4.5_in},1024})
                 .withGains(
-                    {0.0013, 0, 0.00001}, // Distance controller gains
-                    {0.003, 0, 0.000}, // turn controller gains
-                    {0.0005, 0, 0.00000}  // angle controller gains (helps drive straight)
+                    //{0.00006, 0.00000000001, 0.000000000000001}, // Distance controller gains
+                    {0.00022, 0.00011, 0.00000038},
+                    {0.0006, 0.000003, 0.000},
+                    {0.0005, 0, 0}
+                    // {0.003, 0, 0.000}, // turn controller gains
+                    // {0.0005, 0, 0.00000}  // angle controller gains (helps drive straight)
                 )
                 .withSensors(leftEncoder, rightEncoder)
                 .withClosedLoopControllerTimeUtil(50, 5, 100_ms)
-                .withOdometry({{3.25_in, 4.5_in},1024}, StateMode::CARTESIAN, 0_mm, 0_deg)
+                .withOdometry({{3.25_in, 5_in},1024}, StateMode::CARTESIAN, 0_mm, 0_deg)
                 .buildOdometry();
     chassis = std::dynamic_pointer_cast<okapi::DefaultOdomChassisController>(c);
-    chassisPID = std::dynamic_pointer_cast<okapi::ChassisControllerPID>(chassis->getChassisController());    
+    chassisPID = std::dynamic_pointer_cast<okapi::ChassisControllerPID>(chassis->getChassisController());
 }
 
 void Drive::opControl(pros::Controller& joystick) {
