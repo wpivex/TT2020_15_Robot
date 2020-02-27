@@ -20,11 +20,11 @@ void autonomous() {
 
 	// SET COLOR
 	#ifdef BLUE
-	robot->drive->chassis->setTurnsMirrored(false);
+	robot->drive->chassis->setTurnsMirrored(true);
 	#endif
 
 	#ifdef RED
-	robot->drive->chassis->setTurnsMirrored(true);
+	robot->drive->chassis->setTurnsMirrored(false);
 	#endif
 
 	// Deploy
