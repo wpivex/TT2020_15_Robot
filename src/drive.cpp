@@ -1,5 +1,6 @@
 #include "Drive.hpp"
 #include "SheBelieved.hpp"
+#include "menu/Menu.hpp"
 
 Drive::Drive()
 {
@@ -53,34 +54,34 @@ void Drive::opControl(pros::Controller& joystick) {
     double turn = joystick.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) / 127.0;
     // this->chassis->getModel()->arcade(forward, turn);
 
-    forward = std::clamp(forward, -1.0, 1.0);
-    turn = std::clamp(turn, -1.0, 1.0);
-    double leftOutput = 0;
-    double rightOutput = 0;
-    double max = std::copysign(std::max(std::abs(forward), std::abs(turn)), forward);
-    double MAX_VELOCITY = 200;
-    double MAX_VOLTAGE = 12000;
+    // forward = std::clamp(forward, -1.0, 1.0);
+    // turn = std::clamp(turn, -1.0, 1.0);
+    // double leftOutput = 0;
+    // double rightOutput = 0;
+    // double max = std::copysign(std::max(std::abs(forward), std::abs(turn)), forward);
+    // double MAX_VELOCITY = 200;
+    // double MAX_VOLTAGE = 12000;
 
-    if(forward >= 0.0) {
-        if(turn >= 0.0) {
-            leftOutput = max;
-            rightOutput = forward - turn * 0.7;
-        } else {
-            leftOutput = forward + turn * 0.7;
-            rightOutput = max;
-        }
-    } else {
-        if(turn >= 0.0) {
-            leftOutput = forward + turn * 0.7;
-            rightOutput = max;
-        } else {
-            leftOutput = max;
-            rightOutput = forward - turn * 0.7;
-        }
-    }
+    // if(forward >= 0.0) {
+    //     if(turn >= 0.0) {
+    //         leftOutput = max;
+    //         rightOutput = forward - turn * 0.7;
+    //     } else {
+    //         leftOutput = forward + turn * 0.7;
+    //         rightOutput = max;
+    //     }
+    // } else {
+    //     if(turn >= 0.0) {
+    //         leftOutput = forward + turn * 0.7;
+    //         rightOutput = max;
+    //     } else {
+    //         leftOutput = max;
+    //         rightOutput = forward - turn * 0.7;
+    //     }
+    // }
 
-    leftOutput = std::clamp(leftOutput, -1.0, 1.0);
-    rightOutput = std::clamp(rightOutput, -1.0, 1.0);
+    // leftOutput = std::clamp(leftOutput, -1.0, 1.0);
+    // rightOutput = std::clamp(rightOutput, -1.0, 1.0);
     // leftMotors->moveVoltage((forward + turn) * MAX_VOLTAGE);
     // rightMotors->moveVoltage((forward - turn) * MAX_VOLTAGE);
     // leftMotors->moveVoltage(leftOutput * MAX_VOLTAGE);
@@ -95,11 +96,6 @@ void Drive::moveLeft(int power) {
     for (std::tuple<int16_t, int16_t> port : leftMotorPorts) {
         auto [portnum, direction] = port;
         pros::c::motor_move(portnum, power * direction);
-        // if(power == 0) {
-        //     pros::c::motor_move(portnum, 0);
-        // } else {
-        //     pros::c::motor_move_velocity(portnum, power * direction);
-        // }
     }
 }
 
@@ -107,10 +103,45 @@ void Drive::moveRight(int power) {
     for (std::tuple<int16_t, int16_t> port : rightMotorPorts) {
         auto [portnum, direction] = port;
         pros::c::motor_move(portnum, power * direction);
-        // if(power == 0) {
-        //     pros::c::motor_move(portnum, 0);
-        // } else {
-        //     pros::c::motor_move_velocity(portnum, power * direction);
-        // }
     }
+}
+
+void Drive::turnToAngle(QAngle angle, int vel, DrivePrecision precision){
+    // Update desired
+    if(turnsMirrored) {
+        t_d = angle;
+        this->chassis->getModel()->setMaxVelocity(vel);
+        this->chassis->turnToAngle(-1 * t_d);
+    } else {
+        t_d = angle;
+        this->chassis->getModel()->setMaxVelocity(vel);
+        this->chassis->turnToAngle(t_d);
+    }
+}
+
+void Drive::driveDist(QLength len, int vel, DrivePrecision precision){
+    // Update desired position
+    float x_od = sin(t_d.convert(radian)); // x orientation
+    float y_od = cos(t_d.convert(radian)); // y orientation
+    x_d = x_d + (len * x_od); // Update desired x
+    y_d = y_d + (len * y_od); // Update desired y
+
+    Menu::getMenu()->addDebugPrint(3, "x_d:" + std::to_string(x_d.convert(inch))+ " y_d:" + std::to_string(y_d.convert(inch)));
+
+    // Get orientation error
+    OdomState cur_state = chassis->getOdometry()->getState(okapi::StateMode::CARTESIAN);
+    QLength x_e = x_d - cur_state.x; // x error
+    QLength y_e = y_d - cur_state.y; // y error
+    QAngle t_e = t_d - cur_state.theta; // theta error
+    float x_o = sin(cur_state.theta.convert(radian)); // x orientation
+    float y_o = cos(cur_state.theta.convert(radian)); // y orientation
+
+    QLength e_o = (x_o * x_e) + (y_o * y_e); // calc oriented error
+
+    this->chassis->getModel()->setMaxVelocity(vel);
+    this->chassis->moveDistance(e_o);
+}
+
+void Drive::setTurnsMirrored(bool mirror) {
+    this->turnsMirrored = mirror;   
 }

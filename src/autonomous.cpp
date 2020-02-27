@@ -20,7 +20,7 @@ void autonomous() {
 
 	// SET COLOR
 	#ifdef BLUE
-	robot->drive->chassis->setTurnsMirrored(true);
+	robot->drive->setTurnsMirrored(true);
 	#endif
 
 	#ifdef RED
@@ -37,7 +37,7 @@ void autonomous() {
 		{0.0005, 0, 0.000} // Angle controller gains (helps drive straight)
 	);
 	robot->drive->chassis->moveDistance(48.5_in);
-	robot->drive->chassis->turnToAngle(124_deg);
+	robot->drive->turnToAngle(124_deg, 200, HIGH_PRECISION);
 
 	// back up a little
 	robot->drive->chassisPID->setGains(
@@ -70,7 +70,7 @@ void autonomous() {
 		{0.0005, 0, 0} // Angle controller gains (helps drive straight)
 	);
 	robot->drive->chassis->moveDistance(-13_in);
-	robot->drive->chassis->turnToAngle(230_deg);
+	robot->drive->turnToAngle(230_deg, 200, HIGH_PRECISION);
 	robot->lift->moveToPos(0,30);
 	robot->drive->chassis->setMaxVelocity(200);
 	robot->drive->chassisPID->setGains(
@@ -83,7 +83,7 @@ void autonomous() {
 	//pick up cube on side of close tower
 	robot->lift->moveToPos(0,30);
 	robot->drive->chassis->setMaxVelocity(200);
-	robot->drive->chassis->turnToAngle(80_deg);
+	robot->drive->turnToAngle(80_deg, 200, HIGH_PRECISION);
 	robot->lift->moveToPos(0,30);
 	robot->drive->chassisPID->setGains(
 		{0.00018, 0.00008, 0.00000028},
@@ -94,14 +94,15 @@ void autonomous() {
 	robot->lift->moveToPos(0,30);
 
 	//back up anreposition
-	robot->drive->chassis->turnToAngle(70_deg);
+	robot->drive->turnToAngle(70_deg, 200, HIGH_PRECISION);
 	robot->drive->chassisPID->setGains(
 		{0.00022, 0.00011, 0.00000038},
 		{0.0006, 0.00003, 0.00000001},
 		{0.0005, 0, 0.000} // Angle controller gains (helps drive straight)
 	);
 	robot->drive->chassis->moveDistance(-14_in);
-	robot->drive->chassis->turnToAngle(108_deg);
+	robot->drive->turnToAngle(108_deg, 200, HIGH_PRECISION);
+
 
 	// get cube behind tower
 	robot->lift->moveToPos(45,30);
@@ -110,7 +111,7 @@ void autonomous() {
 
 	// re-position and get cube near barrier
 	robot->drive->chassis->moveDistance(-15_in);
-	robot->drive->chassis->turnToAngle(-110_deg);
+	robot->drive->turnToAngle(-110_deg, 200, HIGH_PRECISION);
 	robot->lift->moveToPos(25,30);
 
 	robot->drive->chassisPID->setGains(
@@ -126,22 +127,27 @@ void autonomous() {
 	// robot->runIntake(0);
 
 	//Back up
-	robot-> drive->moveRight(-50);
-	robot-> drive->moveLeft(-50);
+	robot->drive->chassis->getModel()->forward(50);
 	pros::delay(2000);
-	robot-> drive->moveLeft(0);
+	robot->drive->chassis->getModel()->stop();
 
+
+	#ifdef RED
+	robot-> drive->moveLeft(50);
+	pros::delay(1500);
+	robot-> drive->moveLeft(0);
+	#else
+	// the blue case
 	robot-> drive->moveRight(50);
 	pros::delay(1500);
 	robot-> drive->moveRight(0);
+	#endif
 
 	robot->drive->chassis->moveDistance(30_in);
 
-	robot-> drive->moveRight(30);
-	robot-> drive->moveLeft(30);
+	robot->drive->chassis->getModel()->forward(30);
 	pros::delay(2000);
-	robot-> drive->moveRight(0);
-	robot-> drive->moveLeft(0);
+	robot->drive->chassis->getModel()->stop();
 
 
 	//Staccking!!!
@@ -161,7 +167,7 @@ void autonomous() {
 	robot->runIntake(0);
 
 	robot->runIntake(-25);
-  robot->tilter->fourbarGain = 0.18;
+	robot->tilter->fourbarGain = 0.18;
 	for(int i = 0; i < 20; i++){
 			if(i == 7){
 					robot->runIntake(0);
