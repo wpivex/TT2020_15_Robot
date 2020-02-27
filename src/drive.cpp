@@ -114,3 +114,43 @@ void Drive::moveRight(int power) {
         // }
     }
 }
+
+void Drive::turnToAngle(QAngle angle, int vel, DrivePrecision precision){
+    // Update desired
+    if(turnsMirrored) {
+        t_d = angle;
+        this->chassis->getModel()->setMaxVelocity(vel);
+        this->chassis->turnToAngle(-1 * t_d);
+    } else {
+        t_d = angle;
+        this->chassis->getModel()->setMaxVelocity(vel);
+        this->chassis->turnToAngle(t_d);
+    }
+}
+
+void Drive::driveDist(QLength len, int vel, DrivePrecision precision){
+    // Update desired position
+    float x_od = sin(t_d.convert(radian)); // x orientation
+    float y_od = cos(t_d.convert(radian)); // y orientation
+    x_d = x_d + (len * x_od); // Update desired x
+    y_d = y_d + (len * y_od); // Update desired y
+
+    Menu::getMenu()->addDebugPrint(3, "x_d:" + std::to_string(x_d.convert(inch))+ " y_d:" + std::to_string(y_d.convert(inch)));
+
+    // Get orientation error
+    OdomState cur_state = chassis->getOdometry()->getState(okapi::StateMode::CARTESIAN);
+    QLength x_e = x_d - cur_state.x; // x error
+    QLength y_e = y_d - cur_state.y; // y error
+    QAngle t_e = t_d - cur_state.theta; // theta error
+    float x_o = sin(cur_state.theta.convert(radian)); // x orientation
+    float y_o = cos(cur_state.theta.convert(radian)); // y orientation
+
+    QLength e_o = (x_o * x_e) + (y_o * y_e); // calc oriented error
+
+    this->chassis->getModel()->setMaxVelocity(vel);
+    this->chassis->moveDistance(e_o);
+}
+
+void Drive::setTurnsMirrored(bool mirror) {
+    this->turnsMirrored = mirror;   
+}
