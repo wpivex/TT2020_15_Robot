@@ -8,7 +8,7 @@ using namespace okapi;
 enum DrivePrecision{
     HIGH_PRECISION,
     MEDIUM_PRECISION,
-    WHAT_PRECISION
+    NO_PRECISION
 };
 
 class Drive {
@@ -29,8 +29,14 @@ class Drive {
 		std::shared_ptr<MotorGroup> rightMotors;
 		std::vector<std::tuple<int16_t, int16_t>> leftMotorPorts;
 		std::vector<std::tuple<int16_t, int16_t>> rightMotorPorts;
+		QLength getOrientedError();
+
 		bool turnsMirrored = false;
+		// save values of where you want to be (but not neccesarily are)
         QLength x_d = 0_in;
         QLength y_d = 0_in;
         QAngle t_d = 0_deg;
+
+		// threshold 
+		double NO_PRECISION_TURN_THRESH = 2.0;
 };

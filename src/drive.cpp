@@ -107,15 +107,26 @@ void Drive::moveRight(int power) {
 }
 
 void Drive::turnToAngle(QAngle angle, int vel, DrivePrecision precision){
-    // Update desired
-    if(turnsMirrored) {
-        t_d = angle;
-        this->chassis->getModel()->setMaxVelocity(vel);
-        this->chassis->turnToAngle(-1 * t_d);
-    } else {
-        t_d = angle;
-        this->chassis->getModel()->setMaxVelocity(vel);
-        this->chassis->turnToAngle(t_d);
+    int turnsModifier = turnsMirrored ? -1 : 1;
+    // update desired position
+    t_d = angle;
+    switch(precision) {
+        case HIGH_PRECISION:
+            this->chassis->getModel()->setMaxVelocity(vel);
+            this->chassis->turnToAngle(turnsModifier * t_d);
+            break;
+        case MEDIUM_PRECISION:
+            break;
+        case NO_PRECISION:
+            QAngle t_e = t_d;
+            while(!chassisPID->isSettled() && t_e.abs().convert(degree) > degree * NO_PRECISION_TURN_THRESH) {
+                this->chassis->turnAngleAsync(t_e * turnsModifier);
+                OdomState cur_state = chassis->getOdometry()->getState(okapi::StateMode::CARTESIAN);
+                t_e = t_d - cur_state.theta;
+                pros::delay(10);
+            }
+            this->chassis->stop();
+            break;
     }
 }
 
@@ -125,9 +136,24 @@ void Drive::driveDist(QLength len, int vel, DrivePrecision precision){
     float y_od = cos(t_d.convert(radian)); // y orientation
     x_d = x_d + (len * x_od); // Update desired x
     y_d = y_d + (len * y_od); // Update desired y
-
     Menu::getMenu()->addDebugPrint(3, "x_d:" + std::to_string(x_d.convert(inch))+ " y_d:" + std::to_string(y_d.convert(inch)));
+    switch(precision) {
+        case HIGH_PRECISION:
+            this->chassis->getModel()->setMaxVelocity(vel);
+            this->chassis->moveDistance(len);
+            break;
+        case MEDIUM_PRECISION:
+            break;
+        case NO_PRECISION:
+            QLength e_o = getOrientedError();
+            break;
+    }
 
+    this->chassis->getModel()->setMaxVelocity(vel);
+    this->chassis->moveDistance(e_o);
+}
+
+QLength Drive::getOrientedError() {
     // Get orientation error
     OdomState cur_state = chassis->getOdometry()->getState(okapi::StateMode::CARTESIAN);
     QLength x_e = x_d - cur_state.x; // x error
@@ -137,9 +163,7 @@ void Drive::driveDist(QLength len, int vel, DrivePrecision precision){
     float y_o = cos(cur_state.theta.convert(radian)); // y orientation
 
     QLength e_o = (x_o * x_e) + (y_o * y_e); // calc oriented error
-
-    this->chassis->getModel()->setMaxVelocity(vel);
-    this->chassis->moveDistance(e_o);
+    return e_o;
 }
 
 void Drive::setTurnsMirrored(bool mirror) {
