@@ -119,8 +119,9 @@ void Drive::turnToAngle(QAngle angle, int vel, DrivePrecision precision){
             break;
         case NO_PRECISION:
             QAngle t_e = t_d;
-            while(!chassisPID->isSettled() && t_e.abs().convert(degree) > degree * NO_PRECISION_TURN_THRESH) {
+            while(!chassisPID->isSettled() && t_e.abs().convert(degree) > NO_PRECISION_TURN_THRESH) {
                 this->chassis->turnAngleAsync(t_e * turnsModifier);
+                // this->chassis->getModel()->rotate
                 OdomState cur_state = chassis->getOdometry()->getState(okapi::StateMode::CARTESIAN);
                 t_e = t_d - cur_state.theta;
                 pros::delay(10);
@@ -138,19 +139,19 @@ void Drive::driveDist(QLength len, int vel, DrivePrecision precision){
     y_d = y_d + (len * y_od); // Update desired y
     Menu::getMenu()->addDebugPrint(3, "x_d:" + std::to_string(x_d.convert(inch))+ " y_d:" + std::to_string(y_d.convert(inch)));
     switch(precision) {
-        case HIGH_PRECISION:
-            this->chassis->getModel()->setMaxVelocity(vel);
-            this->chassis->moveDistance(len);
+        case HIGH_PRECISION: {
+                QLength e_o = getOrientedError();
+                this->chassis->getModel()->setMaxVelocity(vel);
+                this->chassis->moveDistance(e_o);
+            }
             break;
         case MEDIUM_PRECISION:
             break;
         case NO_PRECISION:
-            QLength e_o = getOrientedError();
+            break;
+        default:
             break;
     }
-
-    this->chassis->getModel()->setMaxVelocity(vel);
-    this->chassis->moveDistance(e_o);
 }
 
 QLength Drive::getOrientedError() {

@@ -28,6 +28,9 @@ void autonomous() {
 	#endif
 
 	// Deploy
+	robot->runIntake(-200);
+	pros::delay(400);
+	robot->runIntake(0);
 
 	// line up with stack of 4.
 	robot->lift->moveToPos(490,100);
@@ -36,7 +39,11 @@ void autonomous() {
 		{0.0006, 0.00003, 0.00000001},
 		{0.0005, 0, 0.000} // Angle controller gains (helps drive straight)
 	);
-	robot->drive->chassis->moveDistance(48.5_in);
+	robot->drive->chassis->moveDistanceAsync(48.5_in);
+	robot->tilter->moveFourbar(100);
+	pros::delay(300);
+	robot->tilter->moveFourbar(-10);
+	robot->drive->chassis->waitUntilSettled();
 	robot->drive->turnToAngle(124_deg, 200, HIGH_PRECISION);
 
 	// back up a little
@@ -151,42 +158,42 @@ void autonomous() {
 
 
 	//Staccking!!!
-	robot->drive->chassisPID->setGains(
-		{0.00022, 0.00011, 0.00000038},
-		{0.0006, 0.00003, 0.00000001},
-		{0.0005, 0, 0.000} // Angle controller gains (helps drive straight)
-	);
-	robot->runIntake(-80);
-	pros::delay(500);
-	robot->runIntake(0);
+	// robot->drive->chassisPID->setGains(
+	// 	{0.00022, 0.00011, 0.00000038},
+	// 	{0.0006, 0.00003, 0.00000001},
+	// 	{0.0005, 0, 0.000} // Angle controller gains (helps drive straight)
+	// );
+	// robot->runIntake(-80);
+	// pros::delay(500);
+	// robot->runIntake(0);
 
-	pros::delay(111);
-	robot->runIntake(30);
+	// pros::delay(111);
+	// robot->runIntake(30);
 
-	pros::delay(200);
-	robot->runIntake(0);
+	// pros::delay(200);
+	// robot->runIntake(0);
 
-	robot->runIntake(-25);
-	robot->tilter->fourbarGain = 0.18;
-	for(int i = 0; i < 20; i++){
-			if(i == 7){
-					robot->runIntake(0);
-			}
-			robot->tilter->moveFourbar(100);
-			pros::delay(100);
-	}
-	robot->tilter->fourbarGain = 0.18;
+	// robot->runIntake(-25);
+	// robot->tilter->fourbarGain = 0.18;
+	// for(int i = 0; i < 20; i++){
+	// 		if(i == 7){
+	// 				robot->runIntake(0);
+	// 		}
+	// 		robot->tilter->moveFourbar(100);
+	// 		pros::delay(100);
+	// }
+	// robot->tilter->fourbarGain = 0.18;
 
 
-	pros::delay(111);
+	// pros::delay(111);
 
-	robot->runIntake(-200);
-	pros::delay(100);
-	robot->runIntake(0);
-	robot->tilter->moveFourbar(-80);
+	// robot->runIntake(-200);
+	// pros::delay(100);
+	// robot->runIntake(0);
+	// robot->tilter->moveFourbar(-80);
 
-	pros::delay(300);
-	robot->runIntake(-200);
-	robot->drive->chassis->moveDistance(-20_in);
+	// pros::delay(300);
+	// robot->runIntake(-200);
+	// robot->drive->chassis->moveDistance(-20_in);
 
 }

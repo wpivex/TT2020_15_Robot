@@ -20,7 +20,7 @@ class Drive {
 
 		void opControl(pros::Controller& joystick);
 		void turnToAngle(QAngle angle, int vel, DrivePrecision precision);
-		void driveDist(QLength len, int vel, DrivePrecision precision);
+		void driveDist(QLength len, int vel, DrivePrecision precision=HIGH_PRECISION);
 		void setTurnsMirrored(bool mirror);
 		void moveLeft(int power);
 		void moveRight(int power);
