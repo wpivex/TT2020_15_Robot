@@ -86,10 +86,12 @@ void Drive::opControl(pros::Controller& joystick) {
     // rightMotors->moveVoltage((forward - turn) * MAX_VOLTAGE);
     // leftMotors->moveVoltage(leftOutput * MAX_VOLTAGE);
     // rightMotors->moveVoltage(rightOutput * MAX_VOLTAGE);
-    this->moveLeft((forward + turn * 0.7) * 127);
-    this->moveRight((forward - turn * 0.7) * 127);
     // this->moveLeft(leftOutput * 200);
     // this->moveRight(rightOutput * 200);
+
+
+    this->moveLeft((forward + turn * 0.85) * 127);
+    this->moveRight((forward - turn * 0.85) * 127);
 }
 
 void Drive::moveLeft(int power) {
@@ -109,18 +111,18 @@ void Drive::moveRight(int power) {
 void Drive::turnToAngle(QAngle angle, int vel, DrivePrecision precision){
     int turnsModifier = turnsMirrored ? -1 : 1;
     // update desired position
-    t_d = angle;
+    t_d = angle * turnsModifier;
     switch(precision) {
         case HIGH_PRECISION:
             this->chassis->getModel()->setMaxVelocity(vel);
-            this->chassis->turnToAngle(turnsModifier * t_d);
+            this->chassis->turnToAngle(t_d);
             break;
         case MEDIUM_PRECISION:
             break;
         case NO_PRECISION:
             QAngle t_e = t_d;
             while(!chassisPID->isSettled() && t_e.abs().convert(degree) > NO_PRECISION_TURN_THRESH) {
-                this->chassis->turnAngleAsync(t_e * turnsModifier);
+                this->chassis->turnAngleAsync(t_e);
                 // this->chassis->getModel()->rotate
                 OdomState cur_state = chassis->getOdometry()->getState(okapi::StateMode::CARTESIAN);
                 t_e = t_d - cur_state.theta;

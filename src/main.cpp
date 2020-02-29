@@ -49,6 +49,7 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	auto robot = SheBelieved::getRobot();
 	auto Menu = Menu::getMenu();
+	robot->drive->chassis->stop();
 	// ADIEncoder encL(ENCODER_LEFT_DRIVE_TOP,ENCODER_LEFT_DRIVE_BOT,false);
 	// ADIEncoder encR(ENCODER_RIGHT_DRIVE_TOP,ENCODER_RIGHT_DRIVE_BOT,true);
 	// encL.reset();

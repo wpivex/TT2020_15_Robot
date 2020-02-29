@@ -26,6 +26,7 @@ void SheBelieved::opControl(pros::Controller &joystick) {
 	lift->opControl(joystick);
 	tilter->opControl(joystick);
 	opControlIntake(joystick);
+	deploy(joystick);
 }
 
 void SheBelieved::runIntake(int power) {
@@ -48,4 +49,14 @@ void SheBelieved::opControlIntake(pros::Controller &joystick) {
 	else {
 		runIntake(0);
 	}
+}
+
+void SheBelieved::deploy(pros::Controller &joystick) {
+	int left = joystick.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT);
+
+	if(left && left != lastLeft) {
+		runIntake(200);
+		tilter->fourbar->moveAbsolute(140, 100);
+	}
+	lastLeft = left;
 }

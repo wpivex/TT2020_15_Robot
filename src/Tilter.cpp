@@ -44,17 +44,27 @@ void Tilter::tiltFourbarRetract() {
 
 void Tilter::moveFourbar(int power) {
 	// if going up, throttle the value
+	double fourbarPos = fourbar->getPosition();
+    double diff = fourbarUpValue - fourbarPos;
 	if(power > 0) {
-		double fourbarPos = fourbar->getPosition();
-        double diff = fourbarUpValue - fourbarPos;
-        int velocity = diff * fourbarGain;
-        velocity = velocity < fourbarMinVel ? fourbarMinVel : velocity;
+		if(diff < 0) {
+			fourbar->moveAbsolute(fourbarUpValue, 100);
+		} else {
+			int velocity = diff * fourbarGain;
+        	velocity = velocity < fourbarMinVel ? fourbarMinVel : velocity;
 
-		fourbar->moveVelocity(velocity);
+			// fourbar->moveVelocity(velocity);
+			pros::c::motor_move_velocity(FOURBAR_RIGHT, -1 * velocity);
+			pros::c::motor_move_velocity(FOURBAR_LEFT, velocity);
+		}
 	} else if(power < 0) {
 		// full speed down
 		fourbar->moveVelocity(power);
 	} else {
-		fourbar->moveVoltage(0);
+		if(diff < 0) {
+			fourbar->moveAbsolute(fourbarUpValue,100);
+		} else {
+			fourbar->moveVoltage(0);
+		}
 	}
 }
