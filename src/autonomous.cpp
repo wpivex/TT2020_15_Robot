@@ -22,19 +22,13 @@ void autonomous() {
 	// -Betty
 	//
 	// SET COLOR
-	// #ifdef BLUE
-	// robot->drive->setTurnsMirrored(true);
-	// #endif
+	#ifdef BLUE
+	robot->drive->setTurnsMirrored(true);
+	#endif
 
-	// #ifdef RED
-	// robot->drive->chassis->setTurnsMirrored(false);
-	// #endif
-
-	if(robot->onRed) {
-		robot->drive->setTurnsMirrored(false);
-	} else {
-		robot->drive->setTurnsMirrored(true);
-	}
+	#ifdef RED
+	robot->drive->chassis->setTurnsMirrored(false);
+	#endif
 
 	// Deploy
 	// robot->runIntake(-200);
