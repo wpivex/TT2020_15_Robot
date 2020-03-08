@@ -1,5 +1,6 @@
 #include "Menu.hpp"
 #include "Orange.h"
+#include "SheBelieved.hpp"
 
 Menu *Menu::menu = NULL;
 Menu *Menu::getMenu() {
@@ -19,10 +20,10 @@ Menu::Menu() : terminalOutput(), debugOutput(10, "") {
     lv_obj_t *label = lv_label_create(tabInfo, NULL);
     lv_label_set_text(label, "help");
     #ifdef BLUE
-    lv_label_set_text(label, "You are on blue.");
+    lv_label_set_text(label, "You are on blue, idiot");
     #endif
     #ifdef RED
-    lv_label_set_text(label, "You are on red.");
+    lv_label_set_text(label, "You are on red, idiot");
     #endif
 }
 

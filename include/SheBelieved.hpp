@@ -12,13 +12,13 @@ using namespace okapi;
 #define DRIVE_RIGHT_MID 9
 #define DRIVE_RIGHT_BACK 10
 
-#define INTAKE_LEFT 11
+#define INTAKE_LEFT 16
 #define INTAKE_RIGHT 1
 #define INTAKE_LEFT_2 3
 #define INTAKE_RIGHT_2 15
 
 #define FOURBAR_LEFT 20
-#define FOURBAR_RIGHT 7
+#define FOURBAR_RIGHT 6
 
 #define ARM_LEFT 14
 #define ARM_RIGHT 5
@@ -40,6 +40,7 @@ class SheBelieved {
 		double fourbarGain = 0.8;
 
 		double armStopPos = 5;
+		int lastLeft = 0;
 	public:
 		static SheBelieved* getRobot();
 		std::shared_ptr<MotorGroup> intake;
@@ -52,4 +53,7 @@ class SheBelieved {
 		void runArm(int power);
 		void armUp(int vel=50);
 		void armDown(int vel=50);
+		void deploy(pros::Controller& joystick);
+
+		bool onRed = false;
 };

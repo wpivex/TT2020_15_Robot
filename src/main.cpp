@@ -49,6 +49,7 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	auto robot = SheBelieved::getRobot();
 	auto Menu = Menu::getMenu();
+	robot->drive->chassis->stop();
 	// ADIEncoder encL(ENCODER_LEFT_DRIVE_TOP,ENCODER_LEFT_DRIVE_BOT,false);
 	// ADIEncoder encR(ENCODER_RIGHT_DRIVE_TOP,ENCODER_RIGHT_DRIVE_BOT,true);
 	// encL.reset();
@@ -69,8 +70,9 @@ void opcontrol() {
 		Menu::getMenu()->addDebugPrint(0, state.str());
 		Menu::getMenu()->addDebugPrint(1, "L: " + std::to_string(vals[0]));
 		Menu::getMenu()->addDebugPrint(2, "R: " + std::to_string(vals[1]));
+		Menu::getMenu()->addDebugPrint(3, "Arm: " + std::to_string((int)robot->lift->armMotors->getPosition()));
 
-		// double forward = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
+		// double forward = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
     	// double turn = (double)(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
 		// leftFront.move(forward + turn*0.7);
 		// leftMid.move(forward + turn*0.7);
